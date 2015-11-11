@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DynamicConfigurationManager.UnitTests
+namespace DynamicConfigurationManager.Tests
 {
     [TestClass]
     public class UnitTest1
