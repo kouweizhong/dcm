@@ -24,12 +24,13 @@
         ///</summary>
         ///<param name="element"></param>
         ///<returns></returns>
-        public static XmlNode GetXmlNode(this XElement element)
+        public static XmlDocument GetXmlDoc(this XNode element)
         {
-            using (XmlReader xmlReader = element.CreateReader())
+            var elementRoot = element.Document ?? element;
+            using (XmlReader reader = elementRoot.CreateReader())
             {
                 var xmlDoc = new XmlDocument();
-                xmlDoc.Load(xmlReader);
+                xmlDoc.Load(reader);
                 return xmlDoc;
             }
         }
@@ -38,13 +39,12 @@
         ///</summary>
         ///<param name="element"></param>
         ///<returns></returns>
-        public static XmlDocument GetXmlDoc(this XNode element)
+        public static XmlNode GetXmlNode(this XElement element)
         {
-            var elementRoot = element.Document ?? element;
-            using (XmlReader reader = elementRoot.CreateReader())
+            using (XmlReader xmlReader = element.CreateReader())
             {
                 var xmlDoc = new XmlDocument();
-                xmlDoc.Load(reader);
+                xmlDoc.Load(xmlReader);
                 return xmlDoc;
             }
         }

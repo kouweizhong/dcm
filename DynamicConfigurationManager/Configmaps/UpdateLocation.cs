@@ -11,10 +11,13 @@ namespace DynamicConfigurationManager.ConfigMaps
             if( ApplicationDeployment.IsNetworkDeployed )
 #endif
             {
-                // allow an optional substring to remove from the compared strings--to make matches domain name agnostic
-                // i.e. UpdateLocation="http://myapp.mydomain.com/clickonce/myapp.application;.mydomain.com"
-                // thus, the entry will match when deployed from http://myapp.mydomain.com/clickonce/myapp.application or http://myapp/clickonce/myapp.application
-                // (depending on how the click once manifest was coded)
+                // allow an optional substring to remove from the compared strings--to make matches
+                // domain name agnostic i.e.
+                // UpdateLocation="http://myapp.mydomain.com/clickonce/myapp.application;.mydomain.com"
+                // thus, the entry will match when deployed from
+                // http://myapp.mydomain.com/clickonce/myapp.application or
+                // http://myapp/clickonce/myapp.application (depending on how the click once
+                // manifest was coded)
                 string repl = null;
                 int semi = configMapAttribute.IndexOf(";", StringComparison.Ordinal);
                 if (semi >= 0 && (semi + 1) <= configMapAttribute.Length)

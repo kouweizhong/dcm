@@ -5,8 +5,8 @@ using System.IO;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     ExecutablePath compares the configMapAttribute value to the fully qualified path of the AppDomain's current base
-    ///     directory.
+    /// ExecutablePath compares the configMapAttribute value to the fully qualified path of the
+    /// AppDomain's current base directory.
     /// </summary>
     internal class ExecutablePath : IConfigMapAttribute
     {

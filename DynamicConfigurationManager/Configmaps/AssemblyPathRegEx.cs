@@ -6,6 +6,11 @@ namespace DynamicConfigurationManager.ConfigMaps
 {
     internal class AssemblyPathRegEx : IConfigMapAttribute
     {
+        public static string GetAssemblyPath()
+        {
+            return Assembly.GetExecutingAssembly().CodeBase;
+        }
+
         public bool Execute(string configMapAttribute)
         {
             bool rtnValue = false;
@@ -19,11 +24,6 @@ namespace DynamicConfigurationManager.ConfigMaps
             }
 
             return rtnValue;
-        }
-
-        public static string GetAssemblyPath()
-        {
-            return Assembly.GetExecutingAssembly().CodeBase;
         }
     }
 }

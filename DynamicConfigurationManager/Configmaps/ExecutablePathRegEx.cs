@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     ExecutablePathRegEx compares the attribute value to the fully qualified path of the AppDomain's current base
-    ///     directory.
+    /// ExecutablePathRegEx compares the attribute value to the fully qualified path of the
+    /// AppDomain's current base directory.
     /// </summary>
     internal class ExecutablePathRegEx : IConfigMapAttribute
     {

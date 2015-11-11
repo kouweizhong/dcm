@@ -26,7 +26,8 @@ namespace DynamicConfigurationManager.ConfigMaps
             _configMapAttributesList.Add("executablePath", new ExecutablePath());
             _configMapAttributesList.Add("executablePathRegEx", new ExecutablePathRegEx());
             _configMapAttributesList.Add("hostname", new HostnameList());
-            // this is intentional to avoid human error of adding hostnames but not changing the attribute name
+            // this is intentional to avoid human error of adding hostnames but not changing the
+            // attribute name
             _configMapAttributesList.Add("hostnameList", new HostnameList());
             _configMapAttributesList.Add("hostnameRegEx", new HostnameRegEx());
             _configMapAttributesList.Add("sitePathRegEx", new SitePathRegEx());

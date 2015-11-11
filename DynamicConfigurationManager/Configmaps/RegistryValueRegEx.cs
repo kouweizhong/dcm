@@ -6,7 +6,8 @@ using System.Text.RegularExpressions;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     SitePathRegEx compares the attribute value to the fully qualified path of the Site's AppDomain Path.
+    /// SitePathRegEx compares the attribute value to the fully qualified path of the Site's
+    /// AppDomain Path.
     /// </summary>
     internal class RegistryValueRegEx : IConfigMapAttribute
     {

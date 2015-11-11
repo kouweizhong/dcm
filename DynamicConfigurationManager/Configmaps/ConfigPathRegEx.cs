@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     ConfigPathRegEx compares the attribute value to the fully qualified path of the current configuration file.
+    /// ConfigPathRegEx compares the attribute value to the fully qualified path of the current
+    /// configuration file.
     /// </summary>
     internal class ConfigPathRegEx : IConfigMapAttribute
     {

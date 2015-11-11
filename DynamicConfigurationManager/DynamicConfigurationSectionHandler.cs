@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -45,7 +44,8 @@ namespace DynamicConfigurationManager
             // Parse the config to build up the settings
             ParseConfig(section);
 
-            // Check to see if there are any "configSet={setname}" arguments on the command line, and map those value in too
+            // Check to see if there are any "configSet={setname}" arguments on the command line,
+            // and map those value in too
             ProcessCommandLineArgs(section);
 
             // Check if configMaps found
@@ -55,7 +55,8 @@ namespace DynamicConfigurationManager
             // perform variable substitutions
             SubstituteVariables();
 
-            // copy the dynamic settings to the appSettings global and export the settings to the environment with the "DCM" prefix for sub-process consumption
+            // copy the dynamic settings to the appSettings global and export the settings to the
+            // environment with the "DCM" prefix for sub-process consumption
             MergeToAppSettingsAndExport();
 
             return settings;
@@ -63,47 +64,25 @@ namespace DynamicConfigurationManager
 
         #endregion IConfigurationSectionHandler Members
 
-        // Check to see if there are any "configSet={setname}" arguments on the command line
-        private void ProcessCommandLineArgs(XmlNode section)
+        private void AddSetting(string key, string value)
         {
-            foreach (XmlNode configSet in
-                Environment.GetCommandLineArgs()
-                    .Where(arg => arg.StartsWith("configSet=", StringComparison.OrdinalIgnoreCase))
-                    .Select(arg => arg.Substring(arg.IndexOf("=", StringComparison.Ordinal) + 1))
-                    .Select(setName => section.SelectSingleNode("configSet[@name=\"" + setName + "\"]"))
-                    .Where(configSet => configSet != null))
+            // check to see if we already have an item with the same key
+            if (settings.AllKeys.Any(k => k.Equals(key, StringComparison.InvariantCultureIgnoreCase)))
             {
-                ParseConfig(configSet);
-                ++numOfHandledConfigMaps;
+                // found an item with the same key, so replace the value with the new value
+                settings[key] = value;
+                Trace.TraceInformation("Replaced: {0} = {1}", key, value);
+            }
+            else
+            {
+                // not found already, so add it
+                settings.Add(key, value);
+                Trace.TraceInformation("Added: {0} = {1}", key, value);
             }
         }
 
-        // perform string substitutions of $(keyname) to their configuration value
-        // i.e. process variables like
-        // <add key="pingHost" value="localhost"/>
-        // <add key="Arguments" value="-n 5 -w 100 $(pingHost)"/>
-        private void SubstituteVariables()
-        {
-            var r = new Regex(@"\$\(([^\)]+)\)", RegexOptions.IgnoreCase);
-            foreach (string key in settings.AllKeys)
-            {
-                string value = settings[key];
-                if (!r.IsMatch(value))
-                    continue;
-
-                string result = value;
-                foreach (Match m in r.Matches(value))
-                {
-                    string outer = m.Groups[0].Value; // i.e. $(HostName)
-                    string inner = m.Groups[1].Value; // i.e HostName
-                    if (settings[inner] != null)
-                        result = result.Replace(outer, settings[inner]);
-                }
-                settings[key] = result;
-            }
-        }
-
-        // copy the dynamic settings to the appSettings global and export the settings to the environment with the "DCM" prefix for sub-process consumption
+        // copy the dynamic settings to the appSettings global and export the settings to the
+        // environment with the "DCM" prefix for sub-process consumption
         private void MergeToAppSettingsAndExport()
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
@@ -112,6 +91,29 @@ namespace DynamicConfigurationManager
                 appSettings[key] = settings[key];
                 Environment.SetEnvironmentVariable("DCM" + key, settings[key], EnvironmentVariableTarget.Process);
             }
+        }
+
+        private void ParseAddNode(XmlNode newNode)
+        {
+            // _newSection.AppendChild( _newSection.OwnerDocument.ImportNode( newNode, true ) );
+            if (newNode.Attributes == null)
+                return;
+
+            // Check to see if there is a configuration database alias identified
+            XmlAttribute xKey = newNode.Attributes["key"];
+            if (xKey == null)
+                return;
+
+            string key = xKey.Value;
+
+            // Check to see if there is a configuration database alias identified
+            XmlAttribute xValue = newNode.Attributes["value"];
+            if (xValue == null)
+                return;
+
+            string value = xValue.Value;
+
+            AddSetting(key, value);
         }
 
         private void ParseConfig(XmlNode currentNode)
@@ -163,7 +165,8 @@ namespace DynamicConfigurationManager
                         ParseIncludeRegistry(node);
                         break;
 
-                        // TODO: implement capability to create xmlFragment values, and deserialize as objects
+                        // TODO: implement capability to create xmlFragment values, and deserialize
+                        //       as objects
                 }
             }
         }
@@ -185,28 +188,11 @@ namespace DynamicConfigurationManager
             return successful;
         }
 
-        private void ParseIncludeSet(XmlNode currentNode)
+        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'"/>
+        // cxAlias = config db alias to a connection string
+        private void ParseIncludeDb(XmlNode currentNode)
         {
-            if (currentNode.Attributes == null)
-                return;
-
-            XmlAttribute setName = currentNode.Attributes["set"];
-            if (setName == null)
-                return;
-
-            Trace.TraceInformation("Adding Set: {0}", setName.Value);
-            var configSetXPath = string.Format("configSet[@name =\"{0}\"]", setName.Value);
-            XmlNode configSet = currentNode.SelectSingleNode("../" + configSetXPath);
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("./" + configSetXPath);
-
-            // find the configSet specified - must have the same parent as the parent of this include node
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
-            if (configSet != null)
-                ParseConfig(configSet);
+            GetConfigFromDb.ParseIncludeDb(currentNode, avoidRepeatCache, s => ConfigurationManager.ConnectionStrings[s], AddSetting);
         }
 
         private void ParseIncludeFile(XmlNode currentNode)
@@ -218,8 +204,7 @@ namespace DynamicConfigurationManager
             if (path == null)
                 return;
 
-            // build absolute path from main config file's path
-            // locate the config file's path
+            // build absolute path from main config file's path locate the config file's path
             string mainDir = Path.GetDirectoryName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
             if (mainDir == null) return;
             string includeFile = Path.Combine(mainDir, path.Value);
@@ -247,13 +232,6 @@ namespace DynamicConfigurationManager
             XmlElement config = xdoc.DocumentElement;
             if (config != null)
                 ParseConfig(config);
-        }
-
-        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'" />
-        // cxAlias = config db alias to a connection string
-        void ParseIncludeDb(XmlNode currentNode)
-        {
-            Dcm.CoreFeatures.GetConfigFromDb.ParseIncludeDb(currentNode, avoidRepeatCache, s => ConfigurationManager.ConnectionStrings[s], AddSetting);
         }
 
         private void ParseIncludeRegistry(XmlNode currentNode)
@@ -286,45 +264,69 @@ namespace DynamicConfigurationManager
             }
         }
 
-        private void ParseAddNode(XmlNode newNode)
+        private void ParseIncludeSet(XmlNode currentNode)
         {
-            // _newSection.AppendChild( _newSection.OwnerDocument.ImportNode( newNode, true ) );
-            if (newNode.Attributes == null)
+            if (currentNode.Attributes == null)
                 return;
 
-            // Check to see if there is a configuration database alias identified
-            XmlAttribute xKey = newNode.Attributes["key"];
-            if (xKey == null)
+            XmlAttribute setName = currentNode.Attributes["set"];
+            if (setName == null)
                 return;
 
-            string key = xKey.Value;
+            Trace.TraceInformation("Adding Set: {0}", setName.Value);
+            var configSetXPath = string.Format("configSet[@name =\"{0}\"]", setName.Value);
+            XmlNode configSet = currentNode.SelectSingleNode("../" + configSetXPath);
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("./" + configSetXPath);
 
-            // Check to see if there is a configuration database alias identified
-            XmlAttribute xValue = newNode.Attributes["value"];
-            if (xValue == null)
-                return;
-
-            string value = xValue.Value;
-
-            AddSetting(key, value);
+            // find the configSet specified - must have the same parent as the parent of this
+            // include node
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
+            if (configSet != null)
+                ParseConfig(configSet);
         }
 
-        private void AddSetting(string key, string value)
+        // Check to see if there are any "configSet={setname}" arguments on the command line
+        private void ProcessCommandLineArgs(XmlNode section)
         {
-            // check to see if we already have an item with the same key
-            if (settings.AllKeys.Any(k => k.Equals(key, StringComparison.InvariantCultureIgnoreCase)))
+            foreach (XmlNode configSet in
+                Environment.GetCommandLineArgs()
+                    .Where(arg => arg.StartsWith("configSet=", StringComparison.OrdinalIgnoreCase))
+                    .Select(arg => arg.Substring(arg.IndexOf("=", StringComparison.Ordinal) + 1))
+                    .Select(setName => section.SelectSingleNode("configSet[@name=\"" + setName + "\"]"))
+                    .Where(configSet => configSet != null))
             {
-                // found an item with the same key, so replace the value with the new value
-                settings[key] = value;
-                Trace.TraceInformation("Replaced: {0} = {1}", key, value);
+                ParseConfig(configSet);
+                ++numOfHandledConfigMaps;
             }
-            else
+        }
+
+        // perform string substitutions of $(keyname) to their configuration value i.e. process
+        // variables like
+        // <add key="pingHost" value="localhost"/>
+        // <add key="Arguments" value="-n 5 -w 100 $(pingHost)"/>
+        private void SubstituteVariables()
+        {
+            var r = new Regex(@"\$\(([^\)]+)\)", RegexOptions.IgnoreCase);
+            foreach (string key in settings.AllKeys)
             {
-                // not found already, so add it
-                settings.Add(key, value);
-                Trace.TraceInformation("Added: {0} = {1}", key, value);
+                string value = settings[key];
+                if (!r.IsMatch(value))
+                    continue;
+
+                string result = value;
+                foreach (Match m in r.Matches(value))
+                {
+                    string outer = m.Groups[0].Value; // i.e. $(HostName)
+                    string inner = m.Groups[1].Value; // i.e HostName
+                    if (settings[inner] != null)
+                        result = result.Replace(outer, settings[inner]);
+                }
+                settings[key] = result;
             }
         }
     }
 }
-

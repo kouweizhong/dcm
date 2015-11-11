@@ -6,13 +6,13 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Xml;
 
-namespace Dcm.CoreFeatures
+namespace DynamicConfigurationManager
 {
-    static class GetConfigFromDb
+    internal static class GetConfigFromDb
     {
-        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'" />
+        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'"/>
         // cxAlias = config db alias to a connection string
-        internal static void ParseIncludeDb(XmlNode currentNode,HashSet<string> avoidRepeatCache,Func<string,ConnectionStringSettings> currentConnectionStrings,Action<string,string> addSetting)
+        internal static void ParseIncludeDb(XmlNode currentNode, HashSet<string> avoidRepeatCache, Func<string, ConnectionStringSettings> currentConnectionStrings, Action<string, string> addSetting)
         {
             if (currentNode.Attributes == null)
                 return;
@@ -65,7 +65,6 @@ namespace Dcm.CoreFeatures
                                 string value = dr[1].ToString();
                                 addSetting(key, value);
                             }
-                            dr.Close();
                         }
                     }
                 }
@@ -75,6 +74,5 @@ namespace Dcm.CoreFeatures
                 Trace.TraceError("Exception reading database values: {0}", ex.Message);
             }
         }
-
     }
 }

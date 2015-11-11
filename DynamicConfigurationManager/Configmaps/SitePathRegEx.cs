@@ -1,11 +1,12 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Diagnostics;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     SitePathRegEx compares the attribute value to the fully qualified path of the Site's AppDomain Path.
+    /// SitePathRegEx compares the attribute value to the fully qualified path of the Site's
+    /// AppDomain Path.
     /// </summary>
     internal class SitePathRegEx : IConfigMapAttribute
     {

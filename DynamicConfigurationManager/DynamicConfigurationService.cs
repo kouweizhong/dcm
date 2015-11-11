@@ -8,29 +8,8 @@ namespace DynamicConfigurationManager
 {
     public static class DynamicConfigurationService
     {
-        static readonly object lockObj = new object();
-        static readonly dynamic dynamicSetting = new DynamicSetting();
-
-        private class DynamicSetting : DynamicObject
-        {
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
-            {
-                result = null;
-                var v = AppSettings[binder.Name];
-                if (v != null)
-                {
-                    result = v;
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public static dynamic Setting
-        {
-            get { return dynamicSetting; }
-        }
+        private static readonly dynamic dynamicSetting = new DynamicSetting();
+        private static readonly object lockObj = new object();
 
         public static NameValueCollection AppSettings
         {
@@ -43,8 +22,22 @@ namespace DynamicConfigurationManager
             }
         }
 
+        public static dynamic Setting
+        {
+            get { return dynamicSetting; }
+        }
+
         /// <summary>
-        ///  Get database connection settings for environment from DynamicConfigurationManager
+        /// Get database connection string for environment from DynamicConfigurationManager
+        /// </summary>
+        public static string ConnectionString(string dynamicConnectionAliasKey, bool throwOnNotFound = false)
+        {
+            var cx = ConnectionStringSetting(dynamicConnectionAliasKey, throwOnNotFound);
+            return cx == null ? null : cx.ConnectionString;
+        }
+
+        /// <summary>
+        /// Get database connection settings for environment from DynamicConfigurationManager
         /// </summary>
         /// <param name="dynamicConnectionAliasKey"></param>
         /// <param name="throwOnNotFound"></param>
@@ -54,15 +47,6 @@ namespace DynamicConfigurationManager
             if (!throwOnNotFound && (AppSettings == null || AppSettings[dynamicConnectionAliasKey] == null))
                 return null;
             return ConfigurationManager.ConnectionStrings[AppSettings[dynamicConnectionAliasKey]];
-        }
-
-        /// <summary>
-        ///  Get database connection string for environment from DynamicConfigurationManager
-        /// </summary>
-        public static string ConnectionString(string dynamicConnectionAliasKey, bool throwOnNotFound = false)
-        {
-            var cx = ConnectionStringSetting(dynamicConnectionAliasKey, throwOnNotFound);
-            return cx == null ? null : cx.ConnectionString;
         }
 
         public static NameValueCollection GetSection(string xpath)
@@ -110,6 +94,21 @@ namespace DynamicConfigurationManager
             var handler = new DynamicConfigurationSectionHandler();
             return (NameValueCollection)handler.Create(null, null, node);
         }
+
+        private class DynamicSetting : DynamicObject
+        {
+            public override bool TryGetMember(GetMemberBinder binder, out object result)
+            {
+                result = null;
+                var v = AppSettings[binder.Name];
+                if (v != null)
+                {
+                    result = v;
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }
-

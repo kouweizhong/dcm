@@ -6,15 +6,9 @@ namespace DynamicConfigurationManager.ConfigMaps
 {
     internal class CommandLineArgs : IConfigMapAttribute
     {
-        // handle commandLineArg="env=GUS-INIT-SIT"
-        public bool Execute(string configMapAttribute)
+        public static IEnumerable<string> GetCommandLineArgs()
         {
-            // Make sure config attribute uses "var=value" syntax
-            string[] argandvalue = configMapAttribute.Split("=".ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);
-            if (argandvalue.Length != 2)
-                throw new ArgumentException("Incorrect syntax for commandLineArg match: " + configMapAttribute);
-            var setterArgs = GetSetterArgs().ToArray();
-            return setterArgs.Any(arg => arg.Equals(configMapAttribute, StringComparison.InvariantCultureIgnoreCase));
+            return Environment.GetCommandLineArgs();
         }
 
         public static IEnumerable<string> GetSetterArgs()
@@ -25,9 +19,15 @@ namespace DynamicConfigurationManager.ConfigMaps
                     select arg);
         }
 
-        public static IEnumerable<string> GetCommandLineArgs()
+        // handle commandLineArg="env=GUS-INIT-SIT"
+        public bool Execute(string configMapAttribute)
         {
-            return Environment.GetCommandLineArgs();
+            // Make sure config attribute uses "var=value" syntax
+            string[] argandvalue = configMapAttribute.Split("=".ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);
+            if (argandvalue.Length != 2)
+                throw new ArgumentException("Incorrect syntax for commandLineArg match: " + configMapAttribute);
+            var setterArgs = GetSetterArgs().ToArray();
+            return setterArgs.Any(arg => arg.Equals(configMapAttribute, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

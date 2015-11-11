@@ -1,11 +1,11 @@
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     CurrentDirectory compares the attribute value to the fully qualified path of the current directory.
+    /// CurrentDirectory compares the attribute value to the fully qualified path of the current directory.
     /// </summary>
     internal class CurrentDirectory : IConfigMapAttribute
     {

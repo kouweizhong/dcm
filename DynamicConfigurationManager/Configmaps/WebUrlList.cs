@@ -52,8 +52,8 @@ namespace DynamicConfigurationManager.ConfigMaps
             Trace.TraceInformation("Original requestHostPort: {0}", requestHostPort);
             Trace.TraceInformation("Original hostnamePort: {0}", hostnamePort);
 
-            // allow an optional substring to remove from the compared strings--to make matches domain name agnostic
-            // i.e. webUrlList="gus-sit:8087,gus-uat:8087;.bankofamerica.com"
+            // allow an optional substring to remove from the compared strings--to make matches
+            // domain name agnostic i.e. webUrlList="gus-sit:8087,gus-uat:8087;.bankofamerica.com"
             // thus, the entry will match when running from http://gus-sit.bankofamerica.com:8087 or http://gus-sit:8087
             int semicolon = configMapAttribute.IndexOf(";", StringComparison.OrdinalIgnoreCase);
             if (semicolon >= 0 && (semicolon + 1) <= configMapAttribute.Length)

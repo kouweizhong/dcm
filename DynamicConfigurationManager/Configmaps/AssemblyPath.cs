@@ -6,7 +6,8 @@ using System.Reflection;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    /// ExecutablePath compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
+    /// ExecutablePath compares the configMapAttribute value to the fully qualified path of the
+    /// application hosts current directory.
     /// </summary>
     internal class AssemblyPath : IConfigMapAttribute
     {

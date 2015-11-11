@@ -1,8 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Diagnostics;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {

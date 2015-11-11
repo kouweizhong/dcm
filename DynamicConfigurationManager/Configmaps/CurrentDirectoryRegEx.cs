@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     CurrentDirectoryRegEx compares the attribute value to the fully qualified path of the current directory.
+    /// CurrentDirectoryRegEx compares the attribute value to the fully qualified path of the
+    /// current directory.
     /// </summary>
     internal class CurrentDirectoryRegEx : IConfigMapAttribute
     {
