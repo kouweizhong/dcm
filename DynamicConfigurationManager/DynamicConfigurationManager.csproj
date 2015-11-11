@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Configmaps\AssemblyPath.cs" />
     <Compile Include="Configmaps\AssemblyPathRegEx.cs" />
-    <Compile Include="Configmaps\CallingTypeFullnameRegEx.cs" />
     <Compile Include="Configmaps\CommandLineArgs.cs" />
     <Compile Include="Configmaps\ConfigMapHandler.cs" />
     <Compile Include="Configmaps\ConfigPathRegEx.cs" />
