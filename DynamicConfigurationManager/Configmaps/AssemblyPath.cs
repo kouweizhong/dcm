@@ -1,16 +1,23 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-
 namespace DynamicConfigurationManager.ConfigMaps
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Reflection;
+
     /// <summary>
-    /// ExecutablePath compares the configMapAttribute value to the fully qualified path of the
+    /// AssemblyPath compares the configMapAttribute value to the fully qualified path of the
     /// application hosts current directory.
     /// </summary>
     internal class AssemblyPath : IConfigMap
     {
+        /// <summary>
+        /// Executes a search of the configMapAttribute value.
+        /// </summary>
+        /// <param name="configMapAttribute">
+        /// The value of configMap attribute from the configuration file.
+        /// </param>
+        /// <returns>Returns true if configMapAttribute value equals the identified value.</returns>
         public bool Execute(string configMapAttribute)
         {
             var rtnValue = false;
@@ -22,7 +29,7 @@ namespace DynamicConfigurationManager.ConfigMaps
                 var assemblyPath = Assembly.GetExecutingAssembly().CodeBase;
                 Trace.TraceInformation("AssemblyPath: matching to {0}", assemblyPath);
 
-                var fullPath = String.Empty;
+                var fullPath = string.Empty;
 
                 if (configMapAttribute.StartsWith("file:///"))
                 {

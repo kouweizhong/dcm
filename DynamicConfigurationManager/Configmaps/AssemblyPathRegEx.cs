@@ -1,11 +1,14 @@
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.RegularExpressions;
-
 namespace DynamicConfigurationManager.ConfigMaps
 {
+    using System.Diagnostics;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+
     internal class AssemblyPathRegEx : IConfigMap
     {
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
         public static string GetAssemblyPath()
         {
             return Assembly.GetExecutingAssembly().CodeBase;

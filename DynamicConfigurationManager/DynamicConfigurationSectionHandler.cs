@@ -1,69 +1,88 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
-
-namespace DynamicConfigurationManager
+﻿namespace DynamicConfigurationManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Configuration;
+    using System.Data;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using Microsoft.Win32;
+
     /// <summary>
+    /// Handles the access to the DynamicConfigurationSection configuration section.
+    /// IConfigurationSectionHandler is deprecated in .NET Framework 2.0 and above. But, because it
+    /// is used internally, it has been kept. In future release we will use the ConfigurationSection
+    /// class to implement the a configuration section handler.
     /// </summary>
     public class DynamicConfigurationSectionHandler : IConfigurationSectionHandler
     {
-        public const string ConfigMapKey = "configmap";
-
-        private readonly HashSet<string> avoidRepeatCache =
-            new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-
-        private readonly ConfigMaps.ConfigMapHandler configMapHandler = new ConfigMaps.ConfigMapHandler(); // Handles ConfigMap parsing
-        private readonly NameValueCollection settings = new NameValueCollection();
-
-        private int numOfHandledConfigMaps; // Count of handled ConfigMaps, if 0 then throw exception
-
-        #region IConfigurationSectionHandler Members
+        /// <summary>
+        /// Helps track which files we opened and don't open it again (avoid recursion).
+        /// </summary>
+        private readonly HashSet<string> avoidRepeatCache = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
+        /// Loads all configuration map handlers.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="configContext"></param>
-        /// <param name="section"></param>
+        private readonly ConfigMaps.ConfigMapHandler configMapHandler = new ConfigMaps.ConfigMapHandler();
+
+        /// <summary>
+        /// A new collection to store application settings as we parse the configuration section.
+        /// </summary>
+        private readonly NameValueCollection settings = new NameValueCollection();
+
+        /// <summary>
+        /// Count of handled ConfigMaps, if 0 then throw exception
+        /// </summary>
+        private int numOfHandledConfigMaps;
+
+        /// <summary>
+        /// Creates a configuration section handler.
+        /// </summary>
+        /// <param name="parent">Parent object.</param>
+        /// <param name="configContext">Configuration context object.</param>
+        /// <param name="section">Section XML node.</param>
         /// <returns></returns>
-        /// <exception cref="ConfigurationErrorsException"></exception>
         public object Create(object parent, object configContext, XmlNode section)
         {
             // Throw error if null section
             if (section == null)
+            {
                 throw new ConfigurationErrorsException("The 'DynamicConfigurationManagerSection' node is not found in app.config.");
+            }
 
             // Parse the config to build up the settings
             ParseConfig(section);
 
-            // Check to see if there are any "configSet={setname}" arguments on the command line,
-            // and map those value in too
+            // Check to see if there are any "configSet={setname}" arguments on the command line and
+            // map those value in too
             ProcessCommandLineArgs(section);
 
             // Check if configMaps found
             if (numOfHandledConfigMaps == 0)
+            {
                 throw new ConfigurationErrorsException("Zero configMaps handled, validate configMap attribute settings and values entered.");
+            }
 
             // perform variable substitutions
             SubstituteVariables();
 
-            // copy the dynamic settings to the appSettings global and export the settings to the
-            // environment with the "DCM" prefix for sub-process consumption
+            // Copy dynamic settings to the appSettings global and export to the environment with
+            // the "DCM" prefix for sub-process consumption
             MergeToAppSettingsAndExport();
 
             return settings;
         }
 
-        #endregion IConfigurationSectionHandler Members
-
+        /// <summary>
+        /// Add key value to new application settings.
+        /// </summary>
+        /// <param name="key">The key attribute from the add element.</param>
+        /// <param name="value">The value attribute from the add element.</param>
         private void AddSetting(string key, string value)
         {
             // check to see if we already have an item with the same key
@@ -81,11 +100,14 @@ namespace DynamicConfigurationManager
             }
         }
 
-        // copy the dynamic settings to the appSettings global and export the settings to the
-        // environment with the "DCM" prefix for sub-process consumption
+        /// <summary>
+        /// Copy the dynamic settings to the appSettings global and export the settings to the
+        /// environment with the "DCM" prefix for sub-process consumption
+        /// </summary>
         private void MergeToAppSettingsAndExport()
         {
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
+
             foreach (string key in settings.AllKeys)
             {
                 appSettings[key] = settings[key];
@@ -93,29 +115,42 @@ namespace DynamicConfigurationManager
             }
         }
 
+        /// <summary>
+        /// Parse each key value found in the a config map and add to new application settings.
+        /// </summary>
+        /// <param name="newNode">A new node to add to our application settings.</param>
         private void ParseAddNode(XmlNode newNode)
         {
-            // _newSection.AppendChild( _newSection.OwnerDocument.ImportNode( newNode, true ) );
             if (newNode.Attributes == null)
+            {
                 return;
+            }
 
             // Check to see if there is a configuration database alias identified
-            XmlAttribute xKey = newNode.Attributes["key"];
-            if (xKey == null)
+            XmlAttribute keyAttribute = newNode.Attributes["key"];
+            if (keyAttribute == null)
+            {
                 return;
+            }
 
-            string key = xKey.Value;
+            string key = keyAttribute.Value;
 
             // Check to see if there is a configuration database alias identified
-            XmlAttribute xValue = newNode.Attributes["value"];
-            if (xValue == null)
+            XmlAttribute valueAttribute = newNode.Attributes["value"];
+            if (valueAttribute == null)
+            {
                 return;
+            }
 
-            string value = xValue.Value;
+            string value = valueAttribute.Value;
 
             AddSetting(key, value);
         }
 
+        /// <summary>
+        /// Parse a config map element and child elements of the current node.
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseConfig(XmlNode currentNode)
         {
             // for each child of the current node, call the relevant processing step
@@ -136,11 +171,14 @@ namespace DynamicConfigurationManager
                                     if (bool.TryParse(stopOnMatch.Value, out shouldStop))
                                     {
                                         if (shouldStop)
+                                        {
                                             return;
+                                        }
                                     }
                                 }
                             }
                         }
+
                         break;
 
                     case "add":
@@ -171,6 +209,11 @@ namespace DynamicConfigurationManager
             }
         }
 
+        /// <summary>
+        /// Parse a configMap node from configuration section.
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
+        /// <returns>Returns true if we find a handler for the configuration map type.</returns>
         private bool ParseConfigMap(XmlNode currentNode)
         {
             bool successful = configMapHandler.IsHandled(currentNode);
@@ -188,25 +231,42 @@ namespace DynamicConfigurationManager
             return successful;
         }
 
-        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'"/>
-        // cxAlias = config db alias to a connection string
+        /// <summary>
+        /// Needs documenatation and testing.
+        /// <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'"/>
+        /// cxAlias = config db alias to a connection string
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeDb(XmlNode currentNode)
         {
             GetConfigFromDb.ParseIncludeDb(currentNode, avoidRepeatCache, s => ConfigurationManager.ConnectionStrings[s], AddSetting);
         }
 
+        /// <summary>
+        /// Parse a configuration file from the current node.
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeFile(XmlNode currentNode)
         {
             if (currentNode.Attributes == null)
+            {
                 return;
+            }
 
             XmlAttribute path = currentNode.Attributes["path"];
             if (path == null)
+            {
                 return;
+            }
 
             // build absolute path from main config file's path locate the config file's path
             string mainDir = Path.GetDirectoryName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-            if (mainDir == null) return;
+
+            if (mainDir == null)
+            {
+                return;
+            }
+
             string includeFile = Path.Combine(mainDir, path.Value);
 
             // track whick files we open and don't open it again (avoid recursion)
@@ -215,6 +275,7 @@ namespace DynamicConfigurationManager
                 Trace.TraceInformation("Already processed file: {0}", path.Value);
                 return;
             }
+
             avoidRepeatCache.Add(includeFile);
 
             if (!File.Exists(includeFile))
@@ -231,17 +292,27 @@ namespace DynamicConfigurationManager
 
             XmlElement config = xdoc.DocumentElement;
             if (config != null)
+            {
                 ParseConfig(config);
+            }
         }
 
+        /// <summary>
+        /// Parse the current XML node and retrieves from the value from the configuration section.
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeRegistry(XmlNode currentNode)
         {
             if (currentNode.Attributes == null)
+            {
                 return;
+            }
 
             XmlAttribute keyName = currentNode.Attributes["HKLMPath"];
             if (keyName == null)
+            {
                 return;
+            }
 
             Trace.TraceInformation("Adding settings from Registry Key: {0}", keyName.Value);
 
@@ -260,36 +331,58 @@ namespace DynamicConfigurationManager
             }
             catch (Exception ex)
             {
-                Trace.TraceInformation("Failure reading registry key: '{0}' {1}", keyName.Value, ex.Message);
+                Trace.TraceError("Failure reading registry key: '{0}' {1}", keyName.Value, ex.Message);
             }
         }
 
+        /// <summary>
+        /// Parse an include element from the configuration section.
+        /// </summary>
+        /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeSet(XmlNode currentNode)
         {
             if (currentNode.Attributes == null)
+            {
                 return;
+            }
 
             XmlAttribute setName = currentNode.Attributes["set"];
             if (setName == null)
+            {
                 return;
+            }
 
             Trace.TraceInformation("Adding Set: {0}", setName.Value);
             var configSetXPath = string.Format("configSet[@name =\"{0}\"]", setName.Value);
             XmlNode configSet = currentNode.SelectSingleNode("../" + configSetXPath);
+
             if (configSet == null)
+            {
                 configSet = currentNode.SelectSingleNode("./" + configSetXPath);
+            }
 
             // find the configSet specified - must have the same parent as the parent of this
             // include node
             if (configSet == null)
+            {
                 configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
+            }
+
             if (configSet == null)
+            {
                 configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
+            }
+
             if (configSet != null)
+            {
                 ParseConfig(configSet);
+            }
         }
 
-        // Check to see if there are any "configSet={setname}" arguments on the command line
+        /// <summary>
+        /// Check to see if there are any "configSet={setname}" arguments on the command line.
+        /// </summary>
+        /// <param name="section">An XML node from the configSet.</param>
         private void ProcessCommandLineArgs(XmlNode section)
         {
             foreach (XmlNode configSet in
@@ -304,27 +397,35 @@ namespace DynamicConfigurationManager
             }
         }
 
-        // perform string substitutions of $(keyname) to their configuration value i.e. process
-        // variables like
-        // <add key="pingHost" value="localhost"/>
-        // <add key="Arguments" value="-n 5 -w 100 $(pingHost)"/>
+        /// <summary>
+        /// Perform string substitutions of $(keyname) to their configuration value i.e. process
+        /// variables like <add key="pingHost" value="localhost"/> and <add key="Arguments" value="-n 5 -w 100 $(pingHost)"/>
+        /// </summary>
         private void SubstituteVariables()
         {
             var r = new Regex(@"\$\(([^\)]+)\)", RegexOptions.IgnoreCase);
+
             foreach (string key in settings.AllKeys)
             {
                 string value = settings[key];
+
                 if (!r.IsMatch(value))
+                {
                     continue;
+                }
 
                 string result = value;
+
                 foreach (Match m in r.Matches(value))
                 {
                     string outer = m.Groups[0].Value; // i.e. $(HostName)
                     string inner = m.Groups[1].Value; // i.e HostName
                     if (settings[inner] != null)
+                    {
                         result = result.Replace(outer, settings[inner]);
+                    }
                 }
+
                 settings[key] = result;
             }
         }

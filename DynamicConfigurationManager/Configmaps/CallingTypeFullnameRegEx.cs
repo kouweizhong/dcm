@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.RegularExpressions;
-
 namespace DynamicConfigurationManager.ConfigMaps
 {
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// this class is very unreliable release builds will sometimes optimize away entire methods, so
     /// the call stack would be different

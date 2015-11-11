@@ -1,11 +1,11 @@
-﻿using System.Collections.Specialized;
-using System.Configuration;
-using System.Dynamic;
-using System.Xml;
-using System.Xml.Linq;
-
-namespace DynamicConfigurationManager
+﻿namespace DynamicConfigurationManager
 {
+    using System.Collections.Specialized;
+    using System.Configuration;
+    using System.Dynamic;
+    using System.Xml;
+    using System.Xml.Linq;
+
     public static class DynamicConfigurationService
     {
         private static readonly dynamic dynamicSetting = new DynamicSetting();
@@ -45,7 +45,10 @@ namespace DynamicConfigurationManager
         public static ConnectionStringSettings ConnectionStringSetting(string dynamicConnectionAliasKey, bool throwOnNotFound = false)
         {
             if (!throwOnNotFound && (AppSettings == null || AppSettings[dynamicConnectionAliasKey] == null))
+            {
                 return null;
+            }
+
             return ConfigurationManager.ConnectionStrings[AppSettings[dynamicConnectionAliasKey]];
         }
 
@@ -64,34 +67,39 @@ namespace DynamicConfigurationManager
         /// </summary>
         public static NameValueCollection GetSection(XmlDocument doc, string xpath)
         {
+            var handler = new DynamicConfigurationSectionHandler();
+
             // If user specified appSettings, use Dynamic Config instead
             if (xpath == null || xpath.ToUpper() == "APPSETTINGS")
+            {
                 xpath = "DynamicConfigurationSection";
+            }
+
             // Get the section name as an XML node
             XmlNode configNode = doc.SelectSingleNode("configuration");
             XmlNode node = configNode.SelectSingleNode(xpath);
 
             // Use the DynamicConfigSectionHandler to parse the section
-            var handler = new DynamicConfigurationSectionHandler();
             return (NameValueCollection)handler.Create(null, null, node);
         }
 
         public static NameValueCollection GetSection(string configFile, string xpath)
         {
-            // If user specified appSettings, use Dynamic Config instead
-            if (xpath == null || xpath.ToUpper() == "APPSETTINGS")
-                xpath = "DynamicConfigurationSection";
-
-            // Open config file as XML
             var doc = new XmlDocument();
-            doc.Load(configFile);
-
-            // Get the section name as an XML node
             var configNode = doc.SelectSingleNode("configuration");
             var node = configNode.SelectSingleNode(xpath);
+            var handler = new DynamicConfigurationSectionHandler();
+
+            // If user specified appSettings, use Dynamic Config instead
+            if (xpath == null || xpath.ToUpper() == "APPSETTINGS")
+            {
+                xpath = "DynamicConfigurationSection";
+            }
+
+            // Open config file as XML
+            doc.Load(configFile);
 
             // Use the DynamicConfigSectionHandler to parse the section
-            var handler = new DynamicConfigurationSectionHandler();
             return (NameValueCollection)handler.Create(null, null, node);
         }
 
@@ -101,6 +109,7 @@ namespace DynamicConfigurationManager
             {
                 result = null;
                 var v = AppSettings[binder.Name];
+
                 if (v != null)
                 {
                     result = v;
