@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class CommandLineArgs : IConfigMapAttribute
+    internal class CommandLineArgs : IConfigMap
     {
         public static IEnumerable<string> GetCommandLineArgs()
         {

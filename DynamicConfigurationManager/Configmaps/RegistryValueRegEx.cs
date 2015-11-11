@@ -9,7 +9,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// SitePathRegEx compares the attribute value to the fully qualified path of the Site's
     /// AppDomain Path.
     /// </summary>
-    internal class RegistryValueRegEx : IConfigMapAttribute
+    internal class RegistryValueRegEx : IConfigMap
     {
         private static readonly Dictionary<string, string> mappings = new Dictionary<string, string>
         {

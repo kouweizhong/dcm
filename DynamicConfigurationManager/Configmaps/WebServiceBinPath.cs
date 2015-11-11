@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class WebServiceBinPath : IConfigMapAttribute
+    internal class WebServiceBinPath : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

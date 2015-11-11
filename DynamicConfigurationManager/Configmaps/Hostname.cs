@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class Hostname : IConfigMapAttribute
+    internal class Hostname : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

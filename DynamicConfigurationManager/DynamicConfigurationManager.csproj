@@ -61,7 +61,7 @@
     <Compile Include="Configmaps\Hostname.cs" />
     <Compile Include="Configmaps\HostnameList.cs" />
     <Compile Include="Configmaps\HostnameRegEx.cs" />
-    <Compile Include="Configmaps\IConfigMapAttribute.cs" />
+    <Compile Include="Configmaps\IConfigMap.cs" />
     <Compile Include="GetConfigFromDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configmaps\RegistryValueRegEx.cs" />

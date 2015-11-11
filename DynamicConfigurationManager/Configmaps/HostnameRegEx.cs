@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class HostnameRegEx : IConfigMapAttribute
+    internal class HostnameRegEx : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

@@ -8,7 +8,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// CurrentDirectoryRegEx compares the attribute value to the fully qualified path of the
     /// current directory.
     /// </summary>
-    internal class CurrentDirectoryRegEx : IConfigMapAttribute
+    internal class CurrentDirectoryRegEx : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

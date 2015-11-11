@@ -7,8 +7,8 @@ namespace DynamicConfigurationManager.ConfigMaps
 {
     internal class ConfigMapHandler
     {
-        private readonly Dictionary<string, IConfigMapAttribute> _configMapAttributesList =
-            new Dictionary<string, IConfigMapAttribute>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, IConfigMap> _configMapAttributesList =
+            new Dictionary<string, IConfigMap>(StringComparer.InvariantCultureIgnoreCase);
 
         public ConfigMapHandler()
         {
@@ -55,7 +55,7 @@ namespace DynamicConfigurationManager.ConfigMaps
                         continue;
                     }
 
-                    IConfigMapAttribute cmd;
+                    IConfigMap cmd;
                     if (_configMapAttributesList.TryGetValue(attrib.Name, out cmd))
                     {
                         // Execute the ConfigMap command

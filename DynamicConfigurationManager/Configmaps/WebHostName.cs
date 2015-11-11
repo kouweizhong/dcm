@@ -6,7 +6,7 @@ using System.Web;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class WebHostName : IConfigMapAttribute
+    internal class WebHostName : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

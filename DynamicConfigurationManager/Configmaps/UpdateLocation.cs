@@ -2,7 +2,7 @@ using System;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class UpdateLocation : IConfigMapAttribute
+    internal class UpdateLocation : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

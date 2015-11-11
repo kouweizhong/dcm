@@ -2,7 +2,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
     /// </summary>
-    public interface IConfigMapAttribute
+    public interface IConfigMap
     {
         /// <summary>
         /// </summary>

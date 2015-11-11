@@ -10,7 +10,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// the call stack would be different
     /// see: http://stackoverflow.com/a/15368508/57883
     /// </summary>
-    internal class CallingTypeFullnameRegEx : IConfigMapAttribute
+    internal class CallingTypeFullnameRegEx : IConfigMap
     {
         public static IEnumerable<string> GetCallingTypesFullNames()
         {

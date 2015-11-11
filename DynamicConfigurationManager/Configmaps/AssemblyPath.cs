@@ -9,7 +9,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// ExecutablePath compares the configMapAttribute value to the fully qualified path of the
     /// application hosts current directory.
     /// </summary>
-    internal class AssemblyPath : IConfigMapAttribute
+    internal class AssemblyPath : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

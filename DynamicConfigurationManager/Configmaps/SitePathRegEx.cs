@@ -8,7 +8,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// SitePathRegEx compares the attribute value to the fully qualified path of the Site's
     /// AppDomain Path.
     /// </summary>
-    internal class SitePathRegEx : IConfigMapAttribute
+    internal class SitePathRegEx : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

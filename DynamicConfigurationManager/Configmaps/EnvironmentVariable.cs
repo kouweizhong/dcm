@@ -5,7 +5,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// <summary>
     /// EnvironmentVariable matches to any environment varial and value; e.g. environmentVariable="environment=INIT".
     /// </summary>
-    internal class EnvironmentVariable : IConfigMapAttribute
+    internal class EnvironmentVariable : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

@@ -4,7 +4,7 @@ using System.Web;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class WebUrlRegEx : IConfigMapAttribute
+    internal class WebUrlRegEx : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

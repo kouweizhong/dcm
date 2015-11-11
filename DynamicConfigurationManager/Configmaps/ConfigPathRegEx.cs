@@ -8,7 +8,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// ConfigPathRegEx compares the attribute value to the fully qualified path of the current
     /// configuration file.
     /// </summary>
-    internal class ConfigPathRegEx : IConfigMapAttribute
+    internal class ConfigPathRegEx : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

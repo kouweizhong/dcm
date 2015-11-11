@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class AssemblyPathRegEx : IConfigMapAttribute
+    internal class AssemblyPathRegEx : IConfigMap
     {
         public static string GetAssemblyPath()
         {

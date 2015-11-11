@@ -7,7 +7,7 @@ namespace DynamicConfigurationManager.ConfigMaps
     /// <summary>
     /// CurrentDirectory compares the attribute value to the fully qualified path of the current directory.
     /// </summary>
-    internal class CurrentDirectory : IConfigMapAttribute
+    internal class CurrentDirectory : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {

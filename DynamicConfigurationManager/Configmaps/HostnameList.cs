@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    internal class HostnameList : IConfigMapAttribute
+    internal class HostnameList : IConfigMap
     {
         public bool Execute(string configMapAttribute)
         {
