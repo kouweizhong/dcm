@@ -8,6 +8,8 @@ namespace DynamicConfigurationManager.UnitTests
         [TestMethod]
         public void TestMethod1()
         {
+            var a = 1;
+            Assert.IsTrue(a == 1);
         }
     }
 }
