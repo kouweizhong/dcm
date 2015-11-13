@@ -25,7 +25,7 @@ namespace DynamicConfigurationManager.ConfigMaps
                 var re = new Regex(configMapAttribute, RegexOptions.IgnoreCase);
 
                 Trace.WriteLine("AssemblyPathRegEx: matching to {0}", assemblyPath);
-                
+
                 rtnValue = re.IsMatch(assemblyPath);
             }
 

@@ -1,9 +1,17 @@
-using System;
-
 namespace DynamicConfigurationManager.ConfigMaps
 {
+    using System;
+
+    /// <summary>
+    /// 
+    /// </summary>
     internal class UpdateLocation : IConfigMap
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configMapAttribute"></param>
+        /// <returns></returns>
         public bool Execute(string configMapAttribute)
         {
             bool rtnValue = false;
@@ -19,7 +27,8 @@ namespace DynamicConfigurationManager.ConfigMaps
                 // http://myapp/clickonce/myapp.application (depending on how the click once
                 // manifest was coded)
                 string repl = null;
-                int semi = configMapAttribute.IndexOf(";", StringComparison.Ordinal);
+                var semi = configMapAttribute.IndexOf(";", StringComparison.Ordinal);
+
                 if (semi >= 0 && (semi + 1) <= configMapAttribute.Length)
                 {
                     repl = configMapAttribute.Substring(semi + 1).ToLower();
@@ -32,15 +41,22 @@ namespace DynamicConfigurationManager.ConfigMaps
                 var actualUri = ApplicationDeployment.CurrentDeployment.UpdateLocation;
 #endif
                 string actualhost = actualUri.Host.ToLower();
-                if (repl != null)
-                    actualhost = actualhost.Replace(repl, String.Empty);
-                string actual = actualhost + actualUri.Port + actualUri.AbsolutePath;
 
+                if (repl != null)
+                {
+                    actualhost = actualhost.Replace(repl, string.Empty);
+                }
+
+                var actual = actualhost + actualUri.Port + actualUri.AbsolutePath;
                 var compareUri = new Uri(configMapAttribute);
                 string comparehost = compareUri.Host.ToLower();
+
                 if (repl != null)
-                    comparehost = comparehost.Replace(repl, String.Empty);
-                string compare = comparehost + compareUri.Port + compareUri.AbsolutePath;
+                {
+                    comparehost = comparehost.Replace(repl, string.Empty);
+                }
+
+                var compare = comparehost + compareUri.Port + compareUri.AbsolutePath;
 
                 rtnValue = actual.Equals(compare, StringComparison.InvariantCultureIgnoreCase);
             }
