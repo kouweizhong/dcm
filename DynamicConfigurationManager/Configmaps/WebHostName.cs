@@ -7,15 +7,15 @@ namespace DynamicConfigurationManager.ConfigMaps
     using System.Web;
 
     /// <summary>
-    /// 
+    /// WebHostName compares the configuration map attribute value to the fully qualified path of the web host URI.
     /// </summary>
     internal class WebHostName : IConfigMap
     {
         /// <summary>
-        /// 
+        /// Determines if the configuration map attribute matches the web host URI.
         /// </summary>
-        /// <param name="configMapAttribute"></param>
-        /// <returns></returns>
+        /// <param name="configMapAttribute">The current configMap element.</param>
+        /// <returns>Return true if we found a match.</returns>
         public bool Execute(string configMapAttribute)
         {
             string hostname;
