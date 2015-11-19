@@ -2,13 +2,15 @@
 {
     using System.Collections.Specialized;
     using System.Configuration;
-    using System.Dynamic;
     using System.Xml;
     using System.Xml.Linq;
 
+    /// <summary>
+    /// DynamicConfigurationService dnyamically creates a new configuration settings at runtime
+    /// based on configuration map logic.
+    /// </summary>
     public static class DynamicConfigurationService
     {
-        private static readonly dynamic dynamicSetting = new DynamicSetting();
         private static readonly object lockObj = new object();
 
         public static NameValueCollection AppSettings
@@ -20,11 +22,6 @@
                     return (NameValueCollection)ConfigurationManager.GetSection("DynamicConfigurationSection");
                 }
             }
-        }
-
-        public static dynamic Setting
-        {
-            get { return dynamicSetting; }
         }
 
         /// <summary>
@@ -101,23 +98,6 @@
 
             // Use the DynamicConfigSectionHandler to parse the section
             return (NameValueCollection)handler.Create(null, null, node);
-        }
-
-        private class DynamicSetting : DynamicObject
-        {
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
-            {
-                result = null;
-                var v = AppSettings[binder.Name];
-
-                if (v != null)
-                {
-                    result = v;
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 }

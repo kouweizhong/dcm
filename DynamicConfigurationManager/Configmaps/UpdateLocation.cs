@@ -3,12 +3,14 @@ namespace DynamicConfigurationManager.ConfigMaps
     using System;
 
     /// <summary>
-    /// UpdateLocation compares the configuration map attribute value to the fully qualified path of the click once application manifest.
+    /// UpdateLocation compares the configuration map attribute value to the fully qualified path of
+    /// the click once application manifest.
     /// </summary>
     internal class UpdateLocation : IConfigMap
     {
         /// <summary>
-        /// Determines if the given configuration map attribute matches the path to the click once application manifest. 
+        /// Determines if the given configuration map attribute matches the path to the click once
+        /// application manifest.
         /// </summary>
         /// <param name="configMapAttribute">The current configMap element.</param>
         /// <returns>Return true if we found a match.</returns>

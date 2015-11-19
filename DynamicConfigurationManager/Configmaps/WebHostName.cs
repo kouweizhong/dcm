@@ -7,7 +7,8 @@ namespace DynamicConfigurationManager.ConfigMaps
     using System.Web;
 
     /// <summary>
-    /// WebHostName compares the configuration map attribute value to the fully qualified path of the web host URI.
+    /// WebHostName compares the configuration map attribute value to the fully qualified path of
+    /// the web host URI.
     /// </summary>
     internal class WebHostName : IConfigMap
     {

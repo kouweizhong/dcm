@@ -6,7 +6,8 @@ namespace DynamicConfigurationManager.ConfigMaps
     using System.Web;
 
     /// <summary>
-    /// WebUrl compares the configuration map attribute value to the fully qualified path of the web host URI and port number.
+    /// WebUrl compares the configuration map attribute value to the fully qualified path of the web
+    /// host URI and port number.
     /// </summary>
     internal class WebUrl : IConfigMap
     {

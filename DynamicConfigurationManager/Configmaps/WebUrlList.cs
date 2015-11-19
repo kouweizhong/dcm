@@ -1,12 +1,21 @@
-using System;
-using System.Diagnostics;
-using System.ServiceModel;
-using System.Web;
-
 namespace DynamicConfigurationManager.ConfigMaps
 {
+    using System;
+    using System.Diagnostics;
+    using System.ServiceModel;
+    using System.Web;
+
+    /// <summary>
+    /// WebUrlList compares the configuration map attribute value to the fully qualified path of the
+    /// web host URI and port number.
+    /// </summary>
     internal class WebUrlList : IConfigMap
     {
+        /// <summary>
+        /// Determines if the configuration map attribute matches the web host URI including port number.
+        /// </summary>
+        /// <param name="configMapAttribute">The current configMap element.</param>
+        /// <returns>Return true if we found a match.</returns>
         public bool Execute(string configMapAttribute)
         {
             int port;
