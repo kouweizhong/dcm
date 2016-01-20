@@ -6,7 +6,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
     /// <summary>
     /// ConfigPathRegEx compares the attribute value to the fully qualified path of the current
-    /// configuration file.
+    /// configuration file using RegEx.
     /// </summary>
     internal class ConfigPathRegEx : IConfigMap
     {

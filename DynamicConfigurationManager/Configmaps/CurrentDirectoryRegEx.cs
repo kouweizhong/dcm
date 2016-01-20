@@ -6,7 +6,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
     /// <summary>
     /// CurrentDirectoryRegEx compares the attribute value to the fully qualified path of the
-    /// current directory.
+    /// current directory using RegEx.
     /// </summary>
     internal class CurrentDirectoryRegEx : IConfigMap
     {

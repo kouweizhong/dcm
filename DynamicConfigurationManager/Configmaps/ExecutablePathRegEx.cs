@@ -6,7 +6,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
     /// <summary>
     /// ExecutablePathRegEx compares the attribute value to the fully qualified path of the
-    /// AppDomain's current base directory using regular expressions.
+    /// AppDomain's current base directory using RegEx.
     /// </summary>
     internal class ExecutablePathRegEx : IConfigMap
     {

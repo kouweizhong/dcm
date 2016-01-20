@@ -6,7 +6,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
     /// <summary>
     /// WebUrlRegEx performs a regular expression search of the fully qualified path of the web host
-    /// URI and port number.
+    /// URI and port number using RegEx.
     /// </summary>
     internal class WebUrlRegEx : IConfigMap
     {

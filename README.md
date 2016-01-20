@@ -31,37 +31,37 @@ Managing application configuration data is nothing new and there are other solut
 - Managing differences in configuration across deployment environments 
 http://vspimp.blogspot.com/2009/01/managing-differences-in-configuration.html
 - Managing Multiple Configuration File Environments with Pre-Build Events 
-<http://www.hanselman.com/blog/ManagingMultipleConfigurationFileEnvironmentsWithPreBuildEvents.aspx>
+http://www.hanselman.com/blog/ManagingMultipleConfigurationFileEnvironmentsWithPreBuildEvents.aspx
 - Environmental overrides made it into EntLib v3 
-<http://bloggingabout.net/blogs/olaf/archive/2007/02/18/environmental-overrides-made-it-into-entlib-v3.aspx>
+http://bloggingabout.net/blogs/olaf/archive/2007/02/18/environmental-overrides-made-it-into-entlib-v3.aspx
 - .Net StockTrader: Configuration Service for .NET Applications and WCF Services 
-<http://msdn.microsoft.com/en-us/netframework/dd164388.aspx>
+http://msdn.microsoft.com/en-us/netframework/dd164388.aspx
 - Configuration-Specific web.config Files by By Dino Esposito, April 12, 2010 
-<http://www.drdobbs.com/visualstudio/224201017>
+http://www.drdobbs.com/visualstudio/224201017
 
 ##Configuration Map attributes
 | ConfigMap Attribute   | Description 
 | -------------------   | ----------- 
 | AssemblyPath          | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
 | AssemblyPathRegEx     | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory using RegEx.
-| CommondlineArgs       |
-| CurrentDirectory      |
-| CurrentDirectoryRegEx |
-| ConfigPathRegEx       |
-| EnvironmentVariables  |
-| ExecutablePath        |
-| ExecutablePathRegEx   |
-| Hostname              |
-| HostnameRegEx         |
-| HostnameList          |
-| RegistryValueRegEx    |
-| SitePathRegEx         |
-| UpdateLocation        |
-| WebHostName           |
-| WebServiceBinPath     |
-| WebUrl                |
-| WebUrlList            |
-| WebUrlRegEx           |
+| CommondlineArgs       | Compares the configMapAttribute value to the submitted command line arguments entered during runtime. This is an experimental configuration map.
+| CurrentDirectory      | Compares the attribute value to the fully qualified path of the current directory.
+| CurrentDirectoryRegEx | Compares the attribute value to the fully qualified path of the current directory using RegEx.
+| ConfigPathRegEx       | Compares the attribute value to the fully qualified path of the current configuration file using RegEx.
+| EnvironmentVariables  | Matches to any environment variables and value; e.g. environmentVariable="environment=INIT".
+| ExecutablePath        | Compares the configMapAttribute value to the fully qualified path of the AppDomain's current base directory.
+| ExecutablePathRegEx   | Compares the attribute value to the fully qualified path of the AppDomain's current base directory using RegEx.
+| Hostname              | Compares the configuration attribute value to the name of the machine executing the application.
+| HostnameRegEx         | Compares a regular expression from the configuration attribute value to the name of the machine executing the application using RegEx.
+| HostnameList          | Compares a list of hostname from the configuration attribute value to the name of the machine executing the application. Useful if your application runs in a multi-host production farm.
+| RegistryValueRegEx    | Compares a regular expression from the configuration attribute value to the value found in the systems registry.
+| SitePathRegEx         | Compares the attribute value to the fully qualified path of the Site's AppDomain Path.
+| UpdateLocation        | Compares the configuration map attribute value to the fully qualified path of the click once application manifest.
+| WebHostName           | Compares the configuration map attribute value to the fully qualified path of the web host URI.
+| WebServiceBinPath     | Compares the configuration map attribute to the bin path of the application web host.
+| WebUrl                | Compares the configuration map attribute value to the fully qualified path of the web host URI and port number.
+| WebUrlList            | Compares the configuration map attribute value to the fully qualified path of the web host URI and port number.
+| WebUrlRegEx           | Compares the configuration map attribute value to the fully qualified path of the web host URI and port number using RegEx.
 
 ##Tutorials and Samples
 TBD

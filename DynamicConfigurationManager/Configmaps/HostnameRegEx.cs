@@ -6,7 +6,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
     /// <summary>
     /// HostnameRegEx compares a regular expression from the configuration attribute value to the
-    /// name of the machine executing the application.
+    /// name of the machine executing the application using RegEx.
     /// </summary>
     internal class HostnameRegEx : IConfigMap
     {
