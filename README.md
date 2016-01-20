@@ -29,7 +29,7 @@ You can even mix multiple configuration map attributes. For example, you can mix
 Managing application configuration data is nothing new and there are other solutions:
 
 - Managing differences in configuration across deployment environments 
-<http://vspimp.blogspot.com/2009/01/managing-differences-in-configuration.html>
+http://vspimp.blogspot.com/2009/01/managing-differences-in-configuration.html
 - Managing Multiple Configuration File Environments with Pre-Build Events 
 <http://www.hanselman.com/blog/ManagingMultipleConfigurationFileEnvironmentsWithPreBuildEvents.aspx>
 - Environmental overrides made it into EntLib v3 
@@ -40,28 +40,28 @@ Managing application configuration data is nothing new and there are other solut
 <http://www.drdobbs.com/visualstudio/224201017>
 
 ##Configuration Map attributes
-- AssemblyPath: 
-    Compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
-- AssemblyPathRegEx: 
-    Compares the configMapAttribute value to the fully qualified path of the application hosts current directory using RegEx.
-- CommondlineArgs
-- CurrentDirectory
-- CurrentDirectoryRegEx
-- ConfigPathRegEx
-- EnvironmentVariables
-- ExecutablePath
-- ExecutablePathRegEx
-- Hostname
-- HostnameRegEx
-- HostnameList
-- RegistryValueRegEx
-- SitePathRegEx
-- UpdateLocation
-- WebHostName
-- WebServiceBinPath
-- WebUrl
-- WebUrlList
-- WebUrlRegEx
+| ConfigMap Attribute   | Description 
+| -------------------   | ----------- 
+| AssemblyPath          | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
+| AssemblyPathRegEx     | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory using RegEx.
+| CommondlineArgs       |
+| CurrentDirectory      |
+| CurrentDirectoryRegEx |
+| ConfigPathRegEx       |
+| EnvironmentVariables  |
+| ExecutablePath        |
+| ExecutablePathRegEx   |
+| Hostname              |
+| HostnameRegEx         |
+| HostnameList          |
+| RegistryValueRegEx    |
+| SitePathRegEx         |
+| UpdateLocation        |
+| WebHostName           |
+| WebServiceBinPath     |
+| WebUrl                |
+| WebUrlList            |
+| WebUrlRegEx           |
 
 ##Tutorials and Samples
 TBD
