@@ -28,14 +28,40 @@ You can even mix multiple configuration map attributes. For example, you can mix
 
 Managing application configuration data is nothing new and there are other solutions:
 
-- Managing differences in configuration across deployment environments <http://vspimp.blogspot.com/2009/01/managing-differences-in-configuration.html>
-- Managing Multiple Configuration File Environments with Pre-Build Events <http://www.hanselman.com/blog/ManagingMultipleConfigurationFileEnvironmentsWithPreBuildEvents.aspx>
-- Environmental overrides made it into EntLib v3 <http://bloggingabout.net/blogs/olaf/archive/2007/02/18/environmental-overrides-made-it-into-entlib-v3.aspx>
-- .Net StockTrader: Configuration Service for .NET Applications and WCF Services <http://msdn.microsoft.com/en-us/netframework/dd164388.aspx>
-- Configuration-Specific web.config Files by By Dino Esposito, April 12, 2010 <http://www.drdobbs.com/visualstudio/224201017>
+- Managing differences in configuration across deployment environments 
+<http://vspimp.blogspot.com/2009/01/managing-differences-in-configuration.html>
+- Managing Multiple Configuration File Environments with Pre-Build Events 
+<http://www.hanselman.com/blog/ManagingMultipleConfigurationFileEnvironmentsWithPreBuildEvents.aspx>
+- Environmental overrides made it into EntLib v3 
+<http://bloggingabout.net/blogs/olaf/archive/2007/02/18/environmental-overrides-made-it-into-entlib-v3.aspx>
+- .Net StockTrader: Configuration Service for .NET Applications and WCF Services 
+<http://msdn.microsoft.com/en-us/netframework/dd164388.aspx>
+- Configuration-Specific web.config Files by By Dino Esposito, April 12, 2010 
+<http://www.drdobbs.com/visualstudio/224201017>
 
-##Dynamic Configuration Manager Solution and Features
-TBD
+##Configuration Map attributes
+- AssemblyPath: 
+    Compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
+- AssemblyPathRegEx: 
+    Compares the configMapAttribute value to the fully qualified path of the application hosts current directory using RegEx.
+- CommondlineArgs
+- CurrentDirectory
+- CurrentDirectoryRegEx
+- ConfigPathRegEx
+- EnvironmentVariables
+- ExecutablePath
+- ExecutablePathRegEx
+- Hostname
+- HostnameRegEx
+- HostnameList
+- RegistryValueRegEx
+- SitePathRegEx
+- UpdateLocation
+- WebHostName
+- WebServiceBinPath
+- WebUrl
+- WebUrlList
+- WebUrlRegEx
 
 ##Tutorials and Samples
 TBD
