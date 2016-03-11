@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="HostNameUnitTest.cs" />
     <Compile Include="GlobalAppSettingUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AssemblyPathUnitTest.cs" />
