@@ -51,7 +51,6 @@
     <Compile Include="Configmaps\ConfigPathRegEx.cs" />
     <Compile Include="Configmaps\CurrentDirectory.cs" />
     <Compile Include="Configmaps\CurrentDirectoryRegEx.cs" />
-    <Compile Include="Configmaps\UpdateLocation.cs" />
     <Compile Include="DynamicConfigurationService.cs" />
     <Compile Include="DynamicConfigurationSectionHandler.cs" />
     <Compile Include="Configmaps\EnvironmentVariable.cs" />
