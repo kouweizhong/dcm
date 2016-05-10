@@ -36,7 +36,7 @@ namespace DynamicConfigurationManager
         /// </summary>
         private readonly NameValueCollection _settings = new NameValueCollection();
 
-        public int NumOfHandledConfigMaps { get; set; }
+        private int NumOfHandledConfigMaps { get; set; }
 
         /// <summary>
         ///     Creates a configuration section handler.
@@ -257,7 +257,7 @@ namespace DynamicConfigurationManager
             // track whick files we open and don't open it again (avoid recursion)
             if (_avoidRepeatCache.Contains(includeFile))
             {
-                Trace.TraceInformation("Already processed file: {0}", path.Value);
+                Trace.TraceInformation($"Already processed file: {path.Value}");
                 return;
             }
 
@@ -265,11 +265,11 @@ namespace DynamicConfigurationManager
 
             if (!File.Exists(includeFile))
             {
-                Trace.TraceInformation("File does not exist: {0}", path.Value);
+                Trace.TraceInformation($"File does not exist: {path.Value}");
                 return;
             }
 
-            Trace.TraceInformation("Retrieving configuration settings from file: {0}", path.Value);
+            Trace.TraceInformation($"Retrieving configuration settings from file: {path.Value}");
 
             // open the file and include it
             var xdoc = new XmlDocument();
@@ -294,7 +294,7 @@ namespace DynamicConfigurationManager
                 return;
             }
 
-            Trace.TraceInformation("Adding settings from Registry Key: {0}", keyName.Value);
+            Trace.TraceInformation($"Adding settings from Registry Key: {keyName.Value}");
 
             try
             {
@@ -309,7 +309,7 @@ namespace DynamicConfigurationManager
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Failure reading registry key: '{0}' {1}", keyName.Value, ex.Message);
+                Trace.TraceError($"Failure reading registry key: '{keyName.Value}' {ex.Message}");
             }
         }
 
@@ -325,7 +325,7 @@ namespace DynamicConfigurationManager
                 return;
             }
 
-            Trace.TraceInformation("Adding Set: {0}", setName.Value);
+            Trace.TraceInformation($"Adding Set: {setName.Value}");
             var configSetXPath = $"configSet[@name =\"{setName.Value}\"]";
             var configSet = ((currentNode.SelectSingleNode("../" + configSetXPath) ??
                               currentNode.SelectSingleNode("./" + configSetXPath)) ??

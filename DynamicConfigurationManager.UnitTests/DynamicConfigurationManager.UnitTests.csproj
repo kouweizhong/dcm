@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EnvironmentVariableTest.cs" />
     <Compile Include="HostNameUnitTest.cs" />
     <Compile Include="GlobalAppSettingUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DynamicConfigurationSection.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DynamicConfigurationManager\DynamicConfigurationManager.csproj">

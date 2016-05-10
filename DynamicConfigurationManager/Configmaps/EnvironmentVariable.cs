@@ -3,7 +3,7 @@ using System;
 namespace DynamicConfigurationManager.ConfigMaps
 {
     /// <summary>
-    ///     EnvironmentVariable matches to any environment variables and value; e.g. environmentVariable="environment=INIT".
+    ///     EnvironmentVariable matches to any environment variables and value; e.g. environmentVariable="environment=TEST".
     /// </summary>
     internal class EnvironmentVariable : IConfigMap
     {
