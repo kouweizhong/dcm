@@ -1,35 +1,31 @@
-﻿namespace DynamicConfigurationManager
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Xml;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Xml;
 
+namespace DynamicConfigurationManager
+{
     internal static class GetConfigFromDb
     {
-        // <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'"/>
-        // cxAlias = config db alias to a connection string
-        internal static void ParseIncludeDb(XmlNode currentNode, HashSet<string> avoidRepeatCache, Func<string, ConnectionStringSettings> currentConnectionStrings, Action<string, string> addSetting)
+        internal static void ParseIncludeDb(XmlNode currentNode, HashSet<string> avoidRepeatCache,
+            Func<string, ConnectionStringSettings> currentConnectionStrings, Action<string, string> addSetting)
         {
-            if (currentNode.Attributes == null)
-                return;
-
             // Check to see if there is a configuration database alias identified
-            XmlAttribute dbAlias = currentNode.Attributes["dbAlias"];
+            var dbAlias = currentNode.Attributes?["dbAlias"];
             if (dbAlias == null)
                 return;
 
             // Check to see if there is a configuration database alias identified
-            XmlAttribute query = currentNode.Attributes["query"];
+            var query = currentNode.Attributes["query"];
             if (query == null)
                 return;
 
             if (avoidRepeatCache.Contains(dbAlias.Value + query.Value))
             {
-                Trace.TraceInformation("Already processed database: {0} {1}", dbAlias.Value, query.Value);
+                Trace.TraceInformation($"Already processed database: {dbAlias.Value} {query.Value}");
                 return;
             }
             avoidRepeatCache.Add(dbAlias.Value + query.Value);
@@ -37,15 +33,16 @@
             // get key/value pairs from db and add them directly
             try
             {
-                ConnectionStringSettings cxSetting = currentConnectionStrings(dbAlias.Value);
+                var cxSetting = currentConnectionStrings(dbAlias.Value);
                 if (cxSetting == null)
                     return;
 
                 // we have a config db! So connect to it and query for any values
-                Trace.TraceInformation("Retrieving configuration settings from db: {0} {1}", cxSetting.ConnectionString, query);
+                Trace.TraceInformation(
+                    $"Retrieving configuration settings from db: {cxSetting.ConnectionString} {query}");
                 using (var cx = new SqlConnection(cxSetting.ConnectionString))
                 {
-                    using (SqlCommand cmd = cx.CreateCommand())
+                    using (var cmd = cx.CreateCommand())
                     {
                         cmd.CommandText = query.Value;
                         cmd.CommandType = CommandType.Text;
@@ -55,14 +52,14 @@
 
                         cx.Open();
                         using (
-                            SqlDataReader dr =
+                            var dr =
                                 cmd.ExecuteReader(CommandBehavior.CloseConnection | CommandBehavior.SingleResult))
                         {
                             // iterate over the results and add them
                             while (dr.Read())
                             {
-                                string key = dr[0].ToString();
-                                string value = dr[1].ToString();
+                                var key = dr[0].ToString();
+                                var value = dr[1].ToString();
                                 addSetting(key, value);
                             }
                         }
@@ -71,7 +68,7 @@
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Exception reading database values: {0}", ex.Message);
+                Trace.TraceError($"Exception reading database values: {ex.Message}");
             }
         }
     }

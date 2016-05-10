@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicConfigurationManager.UnitTests
 {
@@ -9,28 +8,28 @@ namespace DynamicConfigurationManager.UnitTests
         [TestMethod]
         public void AssemblyPath_ShouldPass_If_FileNotFound()
         {
-            string rtn = DynamicConfigurationService.AppSettings["assemblyPathKey1"];
+            var rtn = DynamicConfigurationService.AppSettings["assemblyPathKey1"];
             Assert.IsNull(rtn);
         }
 
         [TestMethod]
         public void AssemblyPath_ShouldPass_If_FileFound()
         {
-            string rtn = DynamicConfigurationService.AppSettings["assemblyPathKey2"];
+            var rtn = DynamicConfigurationService.AppSettings["assemblyPathKey2"];
             Assert.AreEqual("Success", rtn);
         }
 
         [TestMethod]
         public void AssemblyPathRegEx_ShouldPass_If_FileFound()
         {
-            string rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExKey"];
+            var rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExKey"];
             Assert.AreEqual("Success", rtn);
         }
 
         [TestMethod]
         public void AssemblyPathRegEx_ShouldPass_If_FileNotFound()
         {
-            string rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExBad"];
+            var rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExBad"];
             Assert.IsNull(rtn);
         }
     }

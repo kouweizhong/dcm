@@ -1,19 +1,19 @@
+using System;
+using System.Diagnostics;
+using System.ServiceModel;
+using System.Text.RegularExpressions;
+using System.Web;
+
 namespace DynamicConfigurationManager.ConfigMaps
 {
-    using System;
-    using System.Diagnostics;
-    using System.ServiceModel;
-    using System.Text.RegularExpressions;
-    using System.Web;
-
     /// <summary>
-    /// WebHostName compares the configuration map attribute value to the fully qualified path of
-    /// the web host URI.
+    ///     WebHostName compares the configuration map attribute value to the fully qualified path of
+    ///     the web host URI.
     /// </summary>
     internal class WebHostName : IConfigMap
     {
         /// <summary>
-        /// Determines if the configuration map attribute matches the web host URI.
+        ///     Determines if the configuration map attribute matches the web host URI.
         /// </summary>
         /// <param name="configMapAttribute">The current configMap element.</param>
         /// <returns>Return true if we found a match.</returns>
@@ -27,7 +27,7 @@ namespace DynamicConfigurationManager.ConfigMaps
             {
                 var uri = OperationContext.Current.Channel.LocalAddress.Uri;
 
-                Trace.TraceInformation("OperationContext.Current.Channel.LocalAddress.Uri: {0}", uri);
+                Trace.TraceInformation($"OperationContext.Current.Channel.LocalAddress.Uri: {uri}");
 
                 hostname = uri.Host;
             }
@@ -35,7 +35,7 @@ namespace DynamicConfigurationManager.ConfigMaps
             {
                 var reqUri = HttpContext.Current.Request.Url;
 
-                Trace.TraceInformation("HttpContext.Current.Request.Url: {0}", reqUri);
+                Trace.TraceInformation($"HttpContext.Current.Request.Url: {reqUri}");
 
                 hostname = reqUri.Host;
             }
@@ -46,7 +46,7 @@ namespace DynamicConfigurationManager.ConfigMaps
                 throw new ApplicationException("Unknown Http Request Context");
             }
 
-            Trace.TraceInformation("Hostname from context Uri: {0}", hostname);
+            Trace.TraceInformation($"Hostname from context Uri: {hostname}");
 
             var re = new Regex(configMapAttribute, RegexOptions.IgnoreCase);
 
