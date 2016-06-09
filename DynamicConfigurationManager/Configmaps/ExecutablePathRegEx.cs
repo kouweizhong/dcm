@@ -21,7 +21,7 @@ namespace DynamicConfigurationManager.ConfigMaps
             if (configMapAttribute.Length == 0) return false;
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-            Trace.TraceInformation("ExecutablePathRegEx: matching to {0}", baseDirectory);
+            Trace.TraceInformation($"ExecutablePathRegEx: matching to {baseDirectory}");
 
             var re = new Regex(configMapAttribute, RegexOptions.IgnoreCase);
 

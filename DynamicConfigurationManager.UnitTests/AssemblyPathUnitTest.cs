@@ -8,28 +8,28 @@ namespace DynamicConfigurationManager.UnitTests
         [TestMethod]
         public void AssemblyPath_ShouldPass_If_FileNotFound()
         {
-            var rtn = DynamicConfigurationService.AppSettings["assemblyPathKey1"];
+            var rtn = DynamicConfigurationManager.AppSettings["assemblyPathKey1"];
             Assert.IsNull(rtn);
         }
 
         [TestMethod]
         public void AssemblyPath_ShouldPass_If_FileFound()
         {
-            var rtn = DynamicConfigurationService.AppSettings["assemblyPathKey2"];
+            var rtn = DynamicConfigurationManager.AppSettings["assemblyPathKey2"];
             Assert.AreEqual("Success", rtn);
         }
 
         [TestMethod]
         public void AssemblyPathRegEx_ShouldPass_If_FileFound()
         {
-            var rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExKey"];
+            var rtn = DynamicConfigurationManager.AppSettings["assemblyPathRegExKey"];
             Assert.AreEqual("Success", rtn);
         }
 
         [TestMethod]
         public void AssemblyPathRegEx_ShouldPass_If_FileNotFound()
         {
-            var rtn = DynamicConfigurationService.AppSettings["assemblyPathRegExBad"];
+            var rtn = DynamicConfigurationManager.AppSettings["assemblyPathRegExBad"];
             Assert.IsNull(rtn);
         }
     }

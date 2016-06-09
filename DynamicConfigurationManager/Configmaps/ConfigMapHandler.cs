@@ -23,7 +23,6 @@ namespace DynamicConfigurationManager.ConfigMaps
         {
             _configMapHandlers.Add("assemblyPath", new AssemblyPath());
             _configMapHandlers.Add("assemblyPathRegEx", new AssemblyPathRegEx());
-            _configMapHandlers.Add("commandLineArg", new CommandLineArgs());
             _configMapHandlers.Add("commandLineArgs", new CommandLineArgs());
             _configMapHandlers.Add("configPathRegEx", new ConfigPathRegEx());
             _configMapHandlers.Add("currentDirectory", new CurrentDirectory());
@@ -54,6 +53,7 @@ namespace DynamicConfigurationManager.ConfigMaps
 
             // ConfigMap element can have multiple attributes
             if (configMap.Attributes == null) return false;
+
             foreach (XmlAttribute attrib in configMap.Attributes)
             {
                 if (attrib.Name.Equals("name", StringComparison.InvariantCultureIgnoreCase))

@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
 using DynamicConfigurationManager.ConfigMaps;
 using Microsoft.Win32;
@@ -14,7 +13,7 @@ namespace DynamicConfigurationManager
 {
     /// <summary>
     ///     Handles the access to the DynamicConfigurationSection configuration section.
-    ///     IConfigurationSectionHandler is deprecated in .NET Framework 2.0 and above. But, because it
+    ///     <see cref="IConfigurationSectionHandler" /> is deprecated in .NET Framework 2.0 and above. But, because it
     ///     is used internally, it has been kept. In future release we will use the ConfigurationSection
     ///     class to implement the a configuration section handler.
     /// </summary>
@@ -68,9 +67,6 @@ namespace DynamicConfigurationManager
                     "Zero configMaps handled, validate configMap attribute settings and values entered.");
             }
 
-            // perform variable substitutions
-            SubstituteVariables();
-
             // Copy dynamic settings to the appSettings global and export to the environment with
             // the "DCM" prefix for sub-process consumption
             MergeToAppSettingsAndExport();
@@ -90,13 +86,13 @@ namespace DynamicConfigurationManager
             {
                 // found an item with the same key, so replace the value with the new value
                 _settings[key] = value;
-                Trace.TraceInformation("Replaced: {0} = {1}", key, value);
+                Trace.TraceInformation($"Replaced: {key} = {value}");
             }
             else
             {
                 // not found already, so add it
                 _settings.Add(key, value);
-                Trace.TraceInformation("Added: {0} = {1}", key, value);
+                Trace.TraceInformation($"Added: {key} = {value}");
             }
         }
 
@@ -178,7 +174,6 @@ namespace DynamicConfigurationManager
                         break;
 
                     case "include":
-                    case "includeset":
                         ParseIncludeSet(node);
                         break;
 
@@ -205,10 +200,10 @@ namespace DynamicConfigurationManager
         /// <returns>Returns true if we find a handler for the configuration map type.</returns>
         private bool ParseConfigMap(XmlNode currentNode)
         {
-            var successful = _configMapHandler.IsHandled(currentNode);
+            var isHandled = _configMapHandler.IsHandled(currentNode);
 
             // check if we want to include the children of this configMap
-            if (successful)
+            if (isHandled)
             {
                 // Increment the number of handled configMaps
                 ++NumOfHandledConfigMaps;
@@ -217,7 +212,7 @@ namespace DynamicConfigurationManager
                 ParseConfig(currentNode);
             }
 
-            return successful;
+            return isHandled;
         }
 
         /// <summary>
@@ -325,7 +320,7 @@ namespace DynamicConfigurationManager
                 return;
             }
 
-            Trace.TraceInformation($"Adding Set: {setName.Value}");
+            Trace.TraceInformation($"Parsing Include Set: {setName.Value}");
             var configSetXPath = $"configSet[@name =\"{setName.Value}\"]";
             var configSet = ((currentNode.SelectSingleNode("../" + configSetXPath) ??
                               currentNode.SelectSingleNode("./" + configSetXPath)) ??
@@ -356,39 +351,6 @@ namespace DynamicConfigurationManager
             {
                 ParseConfig(configSet);
                 ++NumOfHandledConfigMaps;
-            }
-        }
-
-        /// <summary>
-        ///     Perform string substitutions of $(keyname) to their configuration value i.e. process
-        ///     variables like <add key="pingHost" value="localhost" /> and <add key="Arguments" value="-n 5 -w 100 $(pingHost)" />
-        /// </summary>
-        private void SubstituteVariables()
-        {
-            var r = new Regex(@"\$\(([^\)]+)\)", RegexOptions.IgnoreCase);
-
-            foreach (var key in _settings.AllKeys)
-            {
-                var value = _settings[key];
-
-                if (!r.IsMatch(value))
-                {
-                    continue;
-                }
-
-                var result = value;
-
-                foreach (Match m in r.Matches(value))
-                {
-                    var outer = m.Groups[0].Value; // i.e. $(HostName)
-                    var inner = m.Groups[1].Value; // i.e HostName
-                    if (_settings[inner] != null)
-                    {
-                        result = result.Replace(outer, _settings[inner]);
-                    }
-                }
-
-                _settings[key] = result;
             }
         }
     }

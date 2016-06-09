@@ -18,7 +18,7 @@ namespace DynamicConfigurationManager.UnitTests
         [TestMethod]
         public void EnvironmentVariable_ShouldPass_If_Key1Found()
         {
-            var rtn = DynamicConfigurationService.AppSettings["environmentKey"];
+            var rtn = DynamicConfigurationManager.AppSettings["environmentKey"];
             Assert.AreEqual("testingValue", rtn);
         }
     }
