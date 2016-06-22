@@ -20,7 +20,7 @@ namespace DynamicConfigurationManager
             {
                 lock (LockObj)
                 {
-                    return (NameValueCollection) WebConfigurationManager.GetSection("DynamicConfigurationSection");
+                    return (NameValueCollection) ConfigurationManager.GetSection("DynamicConfigurationSection");
                 }
             }
         }

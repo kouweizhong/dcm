@@ -314,26 +314,26 @@ namespace DynamicConfigurationManager
         /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeSet(XmlNode currentNode)
         {
-            var setName = currentNode.Attributes?["set"];
-            if (setName == null)
-            {
+            if (currentNode.Attributes == null)
                 return;
-            }
 
-            Trace.TraceInformation($"Parsing Include Set: {setName.Value}");
-            var configSetXPath = $"configSet[@name =\"{setName.Value}\"]";
-            var configSet = ((currentNode.SelectSingleNode("../" + configSetXPath) ??
-                              currentNode.SelectSingleNode("./" + configSetXPath)) ??
-                             currentNode.SelectSingleNode("../../" + configSetXPath)) ??
-                            currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
+            var setName = currentNode.Attributes["set"];
+            if (setName == null)
+                return;
 
-            // find the configSet specified - must have the same parent as the parent of this
-            // include node
+            Trace.TraceInformation("Adding Set: {0}", setName.Value);
+            var configSetXPath = string.Format("configSet[@name =\"{0}\"]", setName.Value);
+            var configSet = currentNode.SelectSingleNode("../" + configSetXPath);
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("./" + configSetXPath);
 
+            // find the configSet specified - must have the same parent as the parent of this include node
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
+            if (configSet == null)
+                configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
             if (configSet != null)
-            {
                 ParseConfig(configSet);
-            }
         }
 
         /// <summary>
