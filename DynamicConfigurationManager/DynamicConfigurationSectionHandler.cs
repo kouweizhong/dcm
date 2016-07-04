@@ -182,10 +182,6 @@ namespace DynamicConfigurationManager
                         ParseIncludeFile(node);
                         break;
 
-                    case "includedb":
-                        ParseIncludeDb(node);
-                        break;
-
                     case "includeregistry":
                         ParseIncludeRegistry(node);
                         break;
@@ -213,18 +209,6 @@ namespace DynamicConfigurationManager
             }
 
             return isHandled;
-        }
-
-        /// <summary>
-        ///     Needs documenatation and testing.
-        ///     <includeDb cxAlias="testDbAlias" query="select key, value from AppSettings where env='$(myEnv)'" />
-        ///     cxAlias = config db alias to a connection string
-        /// </summary>
-        /// <param name="currentNode">The current include element we need to parse.</param>
-        private void ParseIncludeDb(XmlNode currentNode)
-        {
-            GetConfigFromDb.ParseIncludeDb(currentNode, _avoidRepeatCache,
-                s => ConfigurationManager.ConnectionStrings[s], AddSetting);
         }
 
         /// <summary>

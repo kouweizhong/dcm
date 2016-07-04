@@ -1,8 +1,5 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
-using System.Web.Configuration;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace DynamicConfigurationManager
 {

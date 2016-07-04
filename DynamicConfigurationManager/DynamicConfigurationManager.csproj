@@ -57,7 +57,6 @@
     <Compile Include="Configmaps\HostnameList.cs" />
     <Compile Include="Configmaps\HostnameRegEx.cs" />
     <Compile Include="Configmaps\IConfigMap.cs" />
-    <Compile Include="GetConfigFromDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configmaps\RegistryValueRegEx.cs" />
     <Compile Include="Configmaps\SitePathRegEx.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="Configmaps\WebUrl.cs" />
     <Compile Include="Configmaps\WebUrlList.cs" />
     <Compile Include="Configmaps\WebUrlRegEx.cs" />
-    <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
