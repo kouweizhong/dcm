@@ -19,21 +19,14 @@ namespace DynamicConfigurationManager
     /// </summary>
     public class DynamicConfigurationSectionHandler : IConfigurationSectionHandler
     {
-        /// <summary>
-        ///     Helps track which files we opened and don't open it again (avoid recursion).
-        /// </summary>
-        private readonly HashSet<string> _avoidRepeatCache =
-            new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+        /// Helps track which files we opened and don't open it again (avoid recursion).
+        private readonly HashSet<string> _avoidRepeatCache = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-        /// <summary>
-        ///     Loads all configuration map handlers.
-        /// </summary>
+        /// Loads all configuration map handlers.
         private readonly ConfigMapHandler _configMapHandler = new ConfigMapHandler();
 
-        /// <summary>
-        ///     A new collection to store application settings as we parse the configuration section.
-        /// </summary>
-        private readonly NameValueCollection _settings = new NameValueCollection();
+        /// A new collection to store application settings as we parse the configuration section they application settings are stored here.
+        private readonly NameValueCollection _dynamicConfigAppsettings = new NameValueCollection();
 
         private int NumOfHandledConfigMaps { get; set; }
 
@@ -49,8 +42,7 @@ namespace DynamicConfigurationManager
             // Throw error if null section
             if (section == null)
             {
-                throw new ConfigurationErrorsException(
-                    "The 'DynamicConfigurationManagerSection' node is not found in app.config.");
+                throw new ConfigurationErrorsException("The 'DynamicConfigurationManagerSection' node is not found in app.config.");
             }
 
             // Parse the config to build up the settings
@@ -67,11 +59,10 @@ namespace DynamicConfigurationManager
                     "Zero configMaps handled, validate configMap attribute settings and values entered.");
             }
 
-            // Copy dynamic settings to the appSettings global and export to the environment with
-            // the "DCM" prefix for sub-process consumption
+            // Copy dynamic settings to the appSettings global and export to the environment with the "DCM" prefix for sub-process consumption
             MergeToAppSettingsAndExport();
 
-            return _settings;
+            return _dynamicConfigAppsettings;
         }
 
         /// <summary>
@@ -82,16 +73,16 @@ namespace DynamicConfigurationManager
         private void AddSetting(string key, string value)
         {
             // check to see if we already have an item with the same key
-            if (_settings.AllKeys.Any(k => k.Equals(key, StringComparison.InvariantCultureIgnoreCase)))
+            if (_dynamicConfigAppsettings.AllKeys.Any(k => k.Equals(key, StringComparison.InvariantCultureIgnoreCase)))
             {
                 // found an item with the same key, so replace the value with the new value
-                _settings[key] = value;
+                _dynamicConfigAppsettings[key] = value;
                 Trace.TraceInformation($"Replaced: {key} = {value}");
             }
             else
             {
                 // not found already, so add it
-                _settings.Add(key, value);
+                _dynamicConfigAppsettings.Add(key, value);
                 Trace.TraceInformation($"Added: {key} = {value}");
             }
         }
@@ -104,10 +95,10 @@ namespace DynamicConfigurationManager
         {
             var appSettings = ConfigurationManager.AppSettings;
 
-            foreach (var key in _settings.AllKeys)
+            foreach (var key in _dynamicConfigAppsettings.AllKeys)
             {
-                appSettings[key] = _settings[key];
-                Environment.SetEnvironmentVariable("DCM" + key, _settings[key], EnvironmentVariableTarget.Process);
+                appSettings[key] = _dynamicConfigAppsettings[key];
+                Environment.SetEnvironmentVariable("DCM" + key, _dynamicConfigAppsettings[key], EnvironmentVariableTarget.Process);
             }
         }
 
@@ -298,26 +289,26 @@ namespace DynamicConfigurationManager
         /// <param name="currentNode">The current include element we need to parse.</param>
         private void ParseIncludeSet(XmlNode currentNode)
         {
-            if (currentNode.Attributes == null)
-                return;
+            if (currentNode.Attributes != null)
+            {
+                var setName = currentNode.Attributes["set"];
+                if (setName == null)
+                    return;
 
-            var setName = currentNode.Attributes["set"];
-            if (setName == null)
-                return;
+                Trace.TraceInformation($"Adding Set: {setName.Value}");
+                var configSetXPath = $"configSet[@name =\"{setName.Value}\"]";
+                var configSet = currentNode.SelectSingleNode("../" + configSetXPath);
+                if (configSet == null)
+                    configSet = currentNode.SelectSingleNode("./" + configSetXPath);
 
-            Trace.TraceInformation("Adding Set: {0}", setName.Value);
-            var configSetXPath = string.Format("configSet[@name =\"{0}\"]", setName.Value);
-            var configSet = currentNode.SelectSingleNode("../" + configSetXPath);
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("./" + configSetXPath);
-
-            // find the configSet specified - must have the same parent as the parent of this include node
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
-            if (configSet == null)
-                configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
-            if (configSet != null)
-                ParseConfig(configSet);
+                // find the configSet specified - must have the same parent as the parent of this include node
+                if (configSet == null)
+                    configSet = currentNode.SelectSingleNode("../../" + configSetXPath);
+                if (configSet == null)
+                    configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
+                if (configSet != null)
+                    ParseConfig(configSet);
+            }
         }
 
         /// <summary>
