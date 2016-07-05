@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DynamicConfigurationSection" targetNamespace="urn:DynamicConfigurationSection" elementFormDefault="qualified"
+    xmlns="urn:DynamicConfigurationSection"
+    xmlns:mstns="urn:DynamicConfigurationSection"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="DynamicConfigurationSection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="add">
+          <xs:complexType>
+            <xs:attribute name="key" type="xs:string" use="required" />
+            <xs:attribute name="value" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="configMap">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="add">
+                <xs:complexType>
+                  <xs:attribute name="key" type="xs:string" use="required" />
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="include">
+                <xs:complexType>
+                  <xs:attribute name="set" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="assemblyPath" type="xs:string" use="optional" />
+            <xs:attribute name="environmentVariable" type="xs:string" use="optional" />
+            <xs:attribute name="assemblyPathRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="callingTypeFullnameRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="commandLineArgs" type="xs:string" use="optional" />
+            <xs:attribute name="configPathRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="name" type="xs:string" use="optional" />
+            <xs:attribute name="hostname" type="xs:string" use="optional" />
+            <xs:attribute name="hostnameRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="executablePathRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="executablePath" type="xs:string" use="optional" />
+            <xs:attribute name="currentDirectory" type="xs:string" use="optional" />
+            <xs:attribute name="currentDirectoryRegEx" type="xs:string" use="optional" />
+            <xs:attribute name="hostnameList" type="xs:string" use="optional" />
+            <xs:attribute name="webServiceBinPath" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="configSets">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="configSet">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="add">
+                      <xs:complexType>
+                        <xs:attribute name="key" type="xs:string" use="required" />
+                        <xs:attribute name="value" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

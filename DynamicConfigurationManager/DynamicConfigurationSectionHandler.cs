@@ -5,7 +5,9 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
+using System.Xml.Schema;
 using DynamicConfigurationManager.ConfigMaps;
 using Microsoft.Win32;
 
@@ -14,20 +16,21 @@ namespace DynamicConfigurationManager
     /// <summary>
     ///     Handles the access to the DynamicConfigurationSection configuration section.
     ///     <see cref="IConfigurationSectionHandler" /> is deprecated in .NET Framework 2.0 and above. But, because it
-    ///     is used internally, it has been kept. In future release we will use the ConfigurationSection
-    ///     class to implement the a configuration section handler.
+    ///     is used internally it is still supported.
     /// </summary>
     public class DynamicConfigurationSectionHandler : IConfigurationSectionHandler
     {
-        /// Helps track which files we opened and don't open it again (avoid recursion).
+        // Helps track which files we opened and don't open it again (avoid recursion).
         private readonly HashSet<string> _avoidRepeatCache = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-        /// Loads all configuration map handlers.
+        // Loads all configuration map handlers.
         private readonly ConfigMapHandler _configMapHandler = new ConfigMapHandler();
 
-        /// A new collection to store application settings as we parse the configuration section they application settings are stored here.
+        // A new collection to store application settings as we parse the configuration section they application settings are stored here.
         private readonly NameValueCollection _dynamicConfigAppsettings = new NameValueCollection();
 
+
+        // The number of handled configuration maps. 
         private int NumOfHandledConfigMaps { get; set; }
 
         /// <summary>
@@ -35,28 +38,26 @@ namespace DynamicConfigurationManager
         /// </summary>
         /// <param name="parent">Parent object.</param>
         /// <param name="configContext">Configuration context object.</param>
-        /// <param name="section">Section XML node.</param>
-        /// <returns></returns>
-        public object Create(object parent, object configContext, XmlNode section)
+        /// <param name="dynamicConfigurationSection">XML section as an XMLnode.</param>
+        /// <returns>A NameValueCollection of new application settings.</returns>
+        public object Create(object parent, object configContext, XmlNode dynamicConfigurationSection)
         {
             // Throw error if null section
-            if (section == null)
+            if (dynamicConfigurationSection == null)
             {
                 throw new ConfigurationErrorsException("The 'DynamicConfigurationManagerSection' node is not found in app.config.");
             }
 
             // Parse the config to build up the settings
-            ParseConfig(section);
+            ParseConfig(dynamicConfigurationSection);
 
-            // Check to see if there are any "configSet={setname}" arguments on the command line and
-            // map those value in too
-            ProcessCommandLineArgs(section);
+            // Check to see if there are any "configSet={setname}" arguments on the command line and map those value in too
+            ProcessCommandLineArgs(dynamicConfigurationSection);
 
             // Check if configMaps found
             if (NumOfHandledConfigMaps == 0)
             {
-                throw new ConfigurationErrorsException(
-                    "Zero configMaps handled, validate configMap attribute settings and values entered.");
+                throw new ConfigurationErrorsException("Zero configMaps handled, validate configMap attribute settings and values entered.");
             }
 
             // Copy dynamic settings to the appSettings global and export to the environment with the "DCM" prefix for sub-process consumption
@@ -224,7 +225,7 @@ namespace DynamicConfigurationManager
 
             var includeFile = Path.Combine(mainDir, path.Value);
 
-            // track whick files we open and don't open it again (avoid recursion)
+            // track which files we open and don't open it again (avoid recursion)
             if (_avoidRepeatCache.Contains(includeFile))
             {
                 Trace.TraceInformation($"Already processed file: {path.Value}");
