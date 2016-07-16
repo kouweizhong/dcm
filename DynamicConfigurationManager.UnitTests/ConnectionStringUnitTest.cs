@@ -9,8 +9,8 @@ namespace DynamicConfigurationManager.UnitTests
         [TestMethod]
         public void ConnectionString_ShouldPass_If_Found()
         {
-            var rtn = DynamicConfigurationManager.ConnectionString("testDbAlias");
-            Assert.IsNotNull(rtn);
+            var rtn = DynamicConfigurationManager.ConnectionString("dbAlias");
+            Assert.AreEqual("TestConnectionString", rtn);
         }
     }
 }

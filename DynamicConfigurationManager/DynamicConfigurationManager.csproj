@@ -48,7 +48,11 @@
     <Compile Include="Configmaps\ConfigPathRegEx.cs" />
     <Compile Include="Configmaps\CurrentDirectory.cs" />
     <Compile Include="Configmaps\CurrentDirectoryRegEx.cs" />
+    <Compile Include="DynamicConfigurationBuilder.cs" />
     <Compile Include="DynamicConfigurationManager.cs" />
+    <Compile Include="DynamicConfigurationSection.cs">
+      <DependentUpon>DynamicConfigurationSection.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DynamicConfigurationSectionHandler.cs" />
     <Compile Include="Configmaps\EnvironmentVariable.cs" />
     <Compile Include="Configmaps\ExecutablePath.cs" />
@@ -57,6 +61,7 @@
     <Compile Include="Configmaps\HostnameList.cs" />
     <Compile Include="Configmaps\HostnameRegEx.cs" />
     <Compile Include="Configmaps\IConfigMap.cs" />
+    <Compile Include="IConfigurationBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configmaps\RegistryValueRegEx.cs" />
     <Compile Include="Configmaps\SitePathRegEx.cs" />

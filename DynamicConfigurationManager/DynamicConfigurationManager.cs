@@ -4,7 +4,7 @@ using System.Configuration;
 namespace DynamicConfigurationManager
 {
     /// <summary>
-    ///     DynamicConfigurationManager dnyamically creates a new configuration settings at runtime
+    ///     DynamicConfigurationManager dynamically creates a new configuration settings at runtime
     ///     based on configuration map logic.
     /// </summary>
     public static class DynamicConfigurationManager

@@ -5,9 +5,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml;
-using System.Xml.Schema;
 using DynamicConfigurationManager.ConfigMaps;
 using Microsoft.Win32;
 
@@ -30,7 +28,7 @@ namespace DynamicConfigurationManager
         private readonly NameValueCollection _dynamicConfigAppsettings = new NameValueCollection();
 
 
-        // The number of handled configuration maps. 
+        // The number of handled configuration maps.
         private int NumOfHandledConfigMaps { get; set; }
 
         /// <summary>
@@ -48,11 +46,10 @@ namespace DynamicConfigurationManager
                 throw new ConfigurationErrorsException("The 'DynamicConfigurationManagerSection' node is not found in app.config.");
             }
 
+            var newdcm = new DynamicConfigurationBuilder().Build(dynamicConfigurationSection);
+
             // Parse the config to build up the settings
             ParseConfig(dynamicConfigurationSection);
-
-            // Check to see if there are any "configSet={setname}" arguments on the command line and map those value in too
-            ProcessCommandLineArgs(dynamicConfigurationSection);
 
             // Check if configMaps found
             if (NumOfHandledConfigMaps == 0)
@@ -309,24 +306,6 @@ namespace DynamicConfigurationManager
                     configSet = currentNode.SelectSingleNode("../../configSets/" + configSetXPath);
                 if (configSet != null)
                     ParseConfig(configSet);
-            }
-        }
-
-        /// <summary>
-        ///     Check to see if there are any "configSet={setname}" arguments on the command line.
-        /// </summary>
-        /// <param name="section">An XML node from the configSet.</param>
-        private void ProcessCommandLineArgs(XmlNode section)
-        {
-            foreach (var configSet in
-                Environment.GetCommandLineArgs()
-                    .Where(arg => arg.StartsWith("configSet=", StringComparison.OrdinalIgnoreCase))
-                    .Select(arg => arg.Substring(arg.IndexOf("=", StringComparison.Ordinal) + 1))
-                    .Select(setName => section.SelectSingleNode("configSet[@name=\"" + setName + "\"]"))
-                    .Where(configSet => configSet != null))
-            {
-                ParseConfig(configSet);
-                ++NumOfHandledConfigMaps;
             }
         }
     }
