@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="DynamicConfigurationSection" targetNamespace="urn:DynamicConfigurationSection" elementFormDefault="qualified"
-    xmlns="urn:DynamicConfigurationSection"
-    xmlns:mstns="urn:DynamicConfigurationSection"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
->
+
+<xs:schema id="DynamicConfigurationSection" targetNamespace="urn:DynamicConfigurationSection"
+           elementFormDefault="qualified"
+           xmlns="urn:DynamicConfigurationSection"
+           xmlns:mstns="urn:DynamicConfigurationSection"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="DynamicConfigurationSection">
     <xs:complexType>
       <xs:sequence>

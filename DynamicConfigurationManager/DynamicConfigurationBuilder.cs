@@ -5,6 +5,8 @@ namespace DynamicConfigurationManager
 {
     internal class DynamicConfigurationBuilder : IConfigurationBuilder
     {
+        public XmlNode DynamicConfigurationSection { get; set; }
+
         public NameValueCollection Build(XmlNode dynamicConfigurationSection)
         {
             // Preserve the original section
@@ -19,7 +21,5 @@ namespace DynamicConfigurationManager
 
             return dynamicConfigurationAppsettings;
         }
-
-        public XmlNode DynamicConfigurationSection { get; set; }
     }
 }
