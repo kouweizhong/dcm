@@ -50,9 +50,6 @@
     <Compile Include="Configmaps\CurrentDirectoryRegEx.cs" />
     <Compile Include="DynamicConfigurationBuilder.cs" />
     <Compile Include="DynamicConfigurationManager.cs" />
-    <Compile Include="DynamicConfigurationSection.cs">
-      <DependentUpon>DynamicConfigurationSection.xsd</DependentUpon>
-    </Compile>
     <Compile Include="DynamicConfigurationSectionHandler.cs" />
     <Compile Include="Configmaps\EnvironmentVariable.cs" />
     <Compile Include="Configmaps\ExecutablePath.cs" />
