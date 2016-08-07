@@ -5,7 +5,9 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
+using System.Xml.Schema;
 using DynamicConfigurationManager.ConfigMaps;
 using Microsoft.Win32;
 
@@ -45,6 +47,11 @@ namespace DynamicConfigurationManager
             {
                 throw new ConfigurationErrorsException("The 'DynamicConfigurationManagerSection' node is not found in app.config.");
             }
+
+            XmlSchemaSet schemas = new XmlSchemaSet();
+
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DefaultNamespace.FolderName.SchemaName.xsd");
+            Trace.WriteLine(stream.Length);
 
             var newdcm = new DynamicConfigurationBuilder().Build(dynamicConfigurationSection);
 
