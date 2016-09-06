@@ -43,7 +43,7 @@ Managing application configuration data is nothing new and there are other solut
 | -------------------   | ----------- 
 | AssemblyPath          | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory.
 | AssemblyPathRegEx     | Compares the configMapAttribute value to the fully qualified path of the application hosts current directory using RegEx.
-| CommondlineArgs       | Compares the configMapAttribute value to the submitted command line arguments entered during runtime. This is an experimental configuration map.
+| CommandlineArgs       | Compares the configMapAttribute value to the submitted command line arguments entered during runtime. This is an experimental configuration map.
 | CurrentDirectory      | Compares the attribute value to the fully qualified path of the current directory.
 | CurrentDirectoryRegEx | Compares the attribute value to the fully qualified path of the current directory using RegEx.
 | ConfigPathRegEx       | Compares the attribute value to the fully qualified path of the current configuration file using RegEx.
