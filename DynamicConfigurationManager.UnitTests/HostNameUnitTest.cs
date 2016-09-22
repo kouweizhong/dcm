@@ -20,6 +20,13 @@ namespace DynamicConfigurationManager.UnitTests
         }
 
         [TestMethod]
+        public void HostNameListWithIncludeSet_ShouldPass_If_Match()
+        {
+            var rtn = DynamicConfigurationManager.AppSettings["hostNameIncludeSetKey1"];
+            Assert.AreEqual("hostNameIncludeSetValue1", rtn);
+        }
+
+        [TestMethod]
         public void HostNameList_ShouldPass_If_MatchOfSomeServiceKey()
         {
             var rtn = DynamicConfigurationManager.AppSettings["SomeService"];

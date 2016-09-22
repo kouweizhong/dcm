@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
+using DynamicConfigurationManager.ConfigMaps;
 
-namespace DynamicConfigurationManager.ConfigMaps
+namespace DynamicConfigurationManager
 {
     /// <summary>
     ///     Loads all configuration map handlers and determines if a handler can process a configMap attribute.
+    ///     Refer to: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
     /// </summary>
-    internal class ConfigMapHandler
+    internal class ConfigMapHandler : IConfigMapHandler
     {
         /// <summary>
         ///     A dictionary that stores the list of configuration map handlers.
