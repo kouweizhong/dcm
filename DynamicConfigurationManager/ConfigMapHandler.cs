@@ -66,9 +66,9 @@ namespace DynamicConfigurationManager
 
                 IConfigMap cmd;
                 if (!_configMapHandlers.TryGetValue(attrib.Name, out cmd)) continue;
-                // Execute the ConfigMap command
+                // IsMatch the ConfigMap command
                 Trace.TraceInformation($"Testing command handler {attrib.Name}: attributes: {attrib.Value}");
-                rtnValue = cmd.Execute(attrib.Value);
+                rtnValue = cmd.IsMatch(attrib.Value);
                 Trace.TraceInformation($"Returned: {rtnValue}");
 
                 // All configMap attributes must return true or the configMap is not a match

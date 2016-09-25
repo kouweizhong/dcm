@@ -18,7 +18,7 @@ namespace DynamicConfigurationManager.ConfigMaps
         ///     The value of configMap attribute from the configuration file.
         /// </param>
         /// <returns>Returns true if configMapAttribute value equals the identified value.</returns>
-        public bool Execute(string configMapAttribute)
+        public bool IsMatch(string configMapAttribute)
         {
             if (configMapAttribute.Length == 0) return false;
             Trace.TraceInformation($"ConfigMapAttribute:{configMapAttribute}");

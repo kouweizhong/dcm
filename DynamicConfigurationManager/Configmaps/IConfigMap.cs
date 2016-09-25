@@ -6,10 +6,10 @@ namespace DynamicConfigurationManager.ConfigMaps
     public interface IConfigMap
     {
         /// <summary>
-        ///     Exceute method of a configuration map handler.
+        ///     Determine if there is a match for the given configuration map handler.
         /// </summary>
-        /// <param name="configMapAttribute">The current configMap element.</param>
+        /// <param name="attributeValue">The current configMap attribute value.</param>
         /// <returns>Return true if we found a match.</returns>
-        bool Execute(string configMapAttribute);
+        bool IsMatch(string attributeValue);
     }
 }

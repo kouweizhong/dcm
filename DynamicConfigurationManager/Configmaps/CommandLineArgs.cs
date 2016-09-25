@@ -16,7 +16,7 @@ namespace DynamicConfigurationManager.ConfigMaps
         /// </summary>
         /// <param name="configMapAttribute">The current configMap element.</param>
         /// <returns>Return true if we found a match.</returns>
-        public bool Execute(string configMapAttribute)
+        public bool IsMatch(string configMapAttribute)
         {
             // Make sure config attribute uses "var=value" syntax
             var argandvalue = configMapAttribute.Split("=".ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);

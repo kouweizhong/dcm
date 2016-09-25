@@ -16,7 +16,7 @@ namespace DynamicConfigurationManager.ConfigMaps
         /// </summary>
         /// <param name="configMapAttribute">The current configMap element.</param>
         /// <returns>Return true if we found a match.</returns>
-        public bool Execute(string configMapAttribute)
+        public bool IsMatch(string configMapAttribute)
         {
             // Loop through each hostname in the array
             return
